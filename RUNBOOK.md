@@ -16,7 +16,7 @@ path_ownership:
   s3_platform: ["build.xml", "src/com/mojang/escape/EscapeApplet.java", "src/com/mojang/escape/level/Level.java"]
   s4_packages: ["src/com/mojang/escape/**"]
   v1_presenter: ["src/com/mojang/escape/EscapeComponent.java"]
-  v2_look: ["src/com/mojang/escape/InputHandler.java", "src/com/mojang/escape/Game.java", "src/com/mojang/escape/entities/Player.java"]
+  v2_look: ["src/com/mojang/escape/InputHandler.java", "src/com/mojang/escape/EscapeComponent.java", "src/com/mojang/escape/Game.java", "src/com/mojang/escape/entities/Player.java"]
   v3_torches: ["src/com/mojang/escape/gui/Bitmap3D.java", "src/com/mojang/escape/level/block/TorchBlock.java"]
   v4_hud: ["src/com/mojang/escape/gui/Screen.java"]
 human_gates_pending:
@@ -62,7 +62,7 @@ Characterise movement and level load **before** `gui/Screen.java`.
 
 1. One S0 agent — CI + `ant test` harness + `AGENTS.md` (prompt in `PLAN.md` §7).
 2. Then S1 and S2 in parallel (tests only).
-3. Then S3, S4, V1–V4 as specified in `PLAN.md`.
+3. Then S3, V1–V4, and S4 last, as specified in `PLAN.md` (V2 and V4 wait for V1; V1∥V3 allowed; S4 package moves only after V4).
 
 ## Notes
 
