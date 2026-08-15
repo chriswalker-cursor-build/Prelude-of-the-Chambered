@@ -93,10 +93,13 @@ State machine (orchestrator never writes production code):
 ```
 discover ✓ → plan_design (this PR) → HUMAN GATE
   → S0 env/CI → S1+S2 test_gen (parallel) → test_exec_baseline
-  → S3 platform → S4 packages (serial)
+  → S3 platform
   → V1 → V2 → V3 → V4   (merge order; V1∥V3 allowed after S1+S2 if paths stay disjoint)
+  → S4 packages (serial, last structural slice)
   → dual-run → bugbot → security → validation → HUMAN SIGNOFF
 ```
+
+S4 runs **after** the visible slices: every V allowlist names today's paths, and a package move first would leave the orchestrator enforcing stale allowlists while adding nothing to the recordings. Once V4 merges, S4 is a moves-only PR over a fully characterised tree.
 
 ### 5.1 S0 — Cloud Agent environment and verify command (serial)
 
@@ -125,7 +128,7 @@ Lock (including oddities — do not “fix” ice physics):
 - `newGame`: spawn on yellow pixel of `start.png`; `rot == Math.PI + 0.4`.
 - Dead: movement ignored; lose after 120 ticks (can stub `Game.lose`).
 
-Do not touch `Player.java` unless a one-line test seam is unavoidable (e.g. injectable `Random`). Call it out in the PR. Prefer testing through public `tick` + a loaded `StartLevel`.
+Do not touch `Player.java` — no test seams are needed. A headless spike (JDK 21, `-Djava.awt.headless=true`) confirmed `Game.newGame()` + `player.tick(...)` runs without a display, spawn is exactly `π + 0.4`, and a 60-tick walk is bit-identical across runs. Test through public `tick` + a loaded `StartLevel`.
 
 ### 5.3 S2 — Characterise level load (tests-only, parallel with S1)
 
@@ -135,7 +138,7 @@ Lock:
 
 - All six PNGs load; width/height; `name` strings.
 - Colour→block class for a fixture pixel per type (table in LEGACY_MAP).
-- Cache: `loadLevel` twice returns the same instance; `Level.clear()` then a new instance.
+- Cache: `loadLevel` twice returns the same instance (spike-verified headless); `Level.clear()` then a new instance. Note `newGame()` itself calls `Level.clear()` — test cache identity via direct `loadLevel` calls.
 - `switchLevel` graph (string + spawn id) via a table test on each `*Level.switchLevel` (inject a fake `Game` if needed — if that requires production edits, wait and use a tiny package-visible setter listed in the PR).
 - Dungeon `init` fires triggers 6 and 7.
 - `byName` reflection still constructs `StartLevel` from `"start"`.
@@ -149,9 +152,9 @@ Lock:
 - Replace `Class.newInstance()` in `Level.byName` with `getDeclaredConstructor().newInstance()` — same behaviour, dual-run via S2 tests.
 - Do not reformat the repo.
 
-### 5.5 S4 — Modular monolith packages (structure, serial)
+### 5.5 S4 — Modular monolith packages (structure, serial, **after V4**)
 
-One conversion agent (or a shepherd). Moves only. Keep public types working; update tests’ imports.
+One conversion agent (or a shepherd). Moves only. Keep public types working; update tests’ imports. Runs last so the V-slice allowlists (which name today's paths) never go stale mid-flight.
 
 Suggested packages (names can shift at implementation if imports stay consistent):
 
@@ -179,7 +182,7 @@ See ADR 0002 for exact acceptance and recording scripts. Merge order matches the
 | V3 | Torch radius | `postProcess` adds torch falloff in world XZ; fog remains away from torches | `depthFog` |
 | V4 | Hotbar / health HUD | Screen-space hotbar + HP after blit; **`Screen.java` allowed only now** | `legacyPanel` |
 
-V1 and V3 do not share files (`EscapeComponent` vs `Bitmap3D`/`TorchBlock`) and may run in parallel **after** S1+S2. V2 touches `Player` — wait for S1. V4 waits for V1 so the HUD is judged at the new scale.
+V1 and V3 do not share files (`EscapeComponent` vs `Bitmap3D`/`TorchBlock`) and may run in parallel **after** S1+S2. V2 needs `EscapeComponent` too (mouse listeners attach there; relative capture needs `java.awt.Robot` re-centering at window level), so **V1 must merge before V2 spawns** — same file, serial by design. V4 waits for V1 so the HUD is judged at the new scale.
 
 Each V-slice PR includes a 30s computer-use recording (walkthrough artefact) as evidence, not as a substitute for `ant test`.
 
@@ -191,9 +194,9 @@ Each V-slice PR includes a 30s computer-use recording (walkthrough artefact) as 
 | S0 | 1 | Serial |
 | S1 / S2 characterisation | 2 | Non-overlapping `test/` trees |
 | S3 | 1 | Small |
-| S4 packages | 1 | Serial shepherd |
 | V1 ∥ V3 | 1–2 | After tests; disjoint allowlists |
-| V2, V4 | 1 each | Serial vs Player / Screen |
+| V2, V4 | 1 each | V2 after V1 (shares `EscapeComponent`); V4 after V1 |
+| S4 packages | 1 | Serial shepherd, after V4 |
 | Conflict / CI fix | 1 | Always serial |
 | Dual-run / validation | 1 | Docs + `evidence/` only |
 | Bugbot / Security | Automations | Beside CI, not instead |
@@ -211,7 +214,7 @@ You are the orchestration agent for Prelude of the Chambered modernisation.
 You never edit production code. You only update RUNBOOK.md and spawn specialists.
 
 State machine: plan_design → (human_gate) → S0 → S1+S2 → test_exec_baseline
-→ S3 → S4 → V1 → V2 → V3 → V4 → test_exec_dual → bugbot → security → validation → human_signoff.
+→ S3 → V1 → V2 → V3 → V4 → S4 → test_exec_dual → bugbot → security → validation → human_signoff.
 
 Rules:
 - Refuse to advance if PLAN/ADRs are awaiting_human_approval.
@@ -261,7 +264,9 @@ Do not touch Screen.java, Bitmap3D, or Player.
 
 ```
 Goal: mouse delta turns the camera with lerp smoothing; keyboard look still works.
-Path allowlist: InputHandler.java, Game.java, Player.java, matching tests.
+Path allowlist: InputHandler.java, EscapeComponent.java, Game.java, Player.java, matching tests.
+Requires V1 merged first (shares EscapeComponent.java — serial, never parallel with V1).
+Relative capture: accumulate deltas and re-center the pointer (java.awt.Robot) while focused.
 Flag: escape.look.mode=mouseLerp (default keyboard).
 Characterisation of keyboard rotSpeed must stay green.
 Record 30s: mouse move → camera eases, not snaps.
