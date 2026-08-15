@@ -1,0 +1,1467 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Agentic Modernisation Framework — Cursor SA</title>
+<style>
+  :root {
+    --bg: #f7f6f2;
+    --fg: #26251e;
+    --accent: #f54e00;
+    --card: #fffdf9;
+    --card-01: #fffdf9;
+    --card-02: #f1efe7;
+    --card-03: #e3e0d5;
+    --card-04: #e3e0d5;
+    --muted: #63615a;
+    --border: #dcd8cc;
+    --warn: #d4a017;
+    --danger: #e85d4c;
+    --ok: #158158;
+    --code-bg: #1a1913;
+    --code-text: #edecec;
+    --radius: 16px;
+    --shadow: 0 18px 60px rgb(38 37 30 / 8%);
+    --font: "CursorGothic", "Inter", -apple-system, "SF Pro Display", "Segoe UI", Helvetica, Arial, sans-serif;
+    --mono: "Berkeley Mono", "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; background: #e6e4dc; }
+  body {
+    margin: 0;
+    font-family: var(--font);
+    background: #e6e4dc;
+    color: var(--fg);
+    line-height: 1.55;
+  }
+  .wrap {
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 2.5rem 1.25rem 4rem;
+    background: var(--bg);
+    min-height: 100vh;
+  }
+  header.hero {
+    padding: 2rem 0 1.5rem;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 2rem;
+  }
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+    font-size: .75rem;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: .75rem;
+    font-family: var(--mono);
+    padding-bottom: .45rem;
+    border-bottom: 1px solid #dcd8cc;
+  }
+  .eyebrow::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    background: var(--accent);
+    flex-shrink: 0;
+  }
+  h1 {
+    font-size: clamp(1.95rem, 4.6vw, 2.75rem);
+    line-height: 1.12;
+    margin: 0 0 .75rem;
+    font-weight: 500;
+    letter-spacing: -0.04em;
+  }
+  .lede {
+    color: var(--muted);
+    font-size: 1.05rem;
+    max-width: 62ch;
+    margin: 0;
+    font-weight: 400;
+  }
+  .hero-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem 1.25rem;
+    margin-top: 1rem;
+    color: var(--muted);
+    font-size: .85rem;
+    font-family: var(--mono);
+    font-weight: 400;
+  }
+  .hero-meta b { color: var(--fg); font-weight: 500; }
+  nav.toc {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1rem 1.25rem;
+    margin: 1.75rem 0 2.25rem;
+    box-shadow: var(--shadow);
+  }
+  nav.toc strong {
+    display: block;
+    margin-bottom: .5rem;
+    font-size: .85rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: .06em;
+  }
+  nav.toc ol { margin: 0; padding-left: 1.2rem; columns: 2; column-gap: 2rem; }
+  nav.toc li { break-inside: avoid; margin: .35rem 0; }
+  nav.toc a { color: var(--fg); text-decoration: none; opacity: .85; }
+  nav.toc a:hover { color: #c43f00; opacity: 1; text-decoration: underline; }
+  section { margin: 2.5rem 0; }
+  h2 {
+    font-size: 1.45rem;
+    margin: 0 0 .85rem;
+    padding-bottom: .4rem;
+    border-bottom: 1px solid #dcd8cc;
+    font-weight: 500;
+  }
+  h3 { font-size: 1.1rem; margin: 1.5rem 0 .5rem; color: #c43f00; font-weight: 500; }
+  h4 { font-size: 1rem; margin: 1.1rem 0 .4rem; }
+  p { margin: .7rem 0; }
+  ul, ol { padding-left: 1.25rem; }
+  li { margin: .4rem 0; }
+  a { color: #c43f00; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .callout {
+    background: #fdeade;
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 var(--radius) var(--radius) 0;
+    padding: 1rem 1.15rem;
+    margin: 1.25rem 0;
+  }
+  .callout.warn { border-left-color: var(--warn); }
+  .callout.danger { border-left-color: var(--danger); }
+  .grid {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    margin: 1rem 0;
+  }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1rem 1.1rem;
+    box-shadow: var(--shadow);
+  }
+  .card h4 { margin: 0 0 .4rem; color: var(--fg); }
+  .card .meta { color: var(--muted); font-size: .85rem; margin-bottom: .5rem; }
+  .card .num {
+    font-family: var(--mono);
+    font-size: .75rem;
+    color: var(--accent);
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: .65rem;
+    font-weight: 600;
+  }
+  .badge {
+    display: inline-block;
+    font-size: .7rem;
+    font-weight: 700;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    padding: .15rem .45rem;
+    border-radius: 999px;
+    background: #f1efe7;
+    color: #c43f00;
+    margin-right: .35rem;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: .92rem;
+    margin: 1rem 0;
+    background: var(--card);
+    border-radius: var(--radius);
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+  th, td {
+    text-align: left;
+    padding: .7rem .85rem;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  th {
+    background: transparent;
+    color: #6f6b61;
+    font-weight: 600;
+    font-size: .8rem;
+    font-family: var(--mono);
+    text-transform: uppercase;
+    letter-spacing: .04em;
+  }
+  tr:last-child td { border-bottom: none; }
+  tbody tr:hover { background: #f1efe7; }
+  code, pre { font-family: var(--mono); font-size: .85rem; color: var(--code-text); }
+  code {
+    background: var(--code-bg);
+    border: 1px solid #2b2923;
+    padding: .1rem .35rem;
+    border-radius: 5px;
+  }
+  pre {
+    background: var(--code-bg);
+    border: 1px solid #2b2923;
+    border-radius: var(--radius);
+    padding: 1rem 1.1rem;
+    overflow-x: auto;
+    margin: .75rem 0 1.1rem;
+    color: var(--code-text);
+  }
+  pre code { background: none; border: none; padding: 0; color: inherit; }
+  .pipeline { display: grid; gap: .6rem; margin: 1rem 0; }
+  .pipeline-step {
+    display: grid;
+    grid-template-columns: 2.2rem 1fr;
+    gap: .75rem;
+    align-items: start;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: .85rem 1rem;
+    box-shadow: var(--shadow);
+  }
+  .pipeline-step .n {
+    width: 2.2rem; height: 2.2rem;
+    border-radius: 50%;
+    background: var(--card-03);
+    color: var(--accent);
+    display: grid; place-items: center;
+    font-weight: 700; font-size: .9rem;
+  }
+  .ladder { display: grid; gap: .6rem; margin: 1rem 0; }
+  .rung {
+    display: grid;
+    grid-template-columns: 132px 1fr 180px;
+    gap: 1rem;
+    align-items: start;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: .85rem 1rem;
+    box-shadow: var(--shadow);
+  }
+  .stage {
+    font-family: var(--mono);
+    font-size: .7rem;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding-top: 3px;
+  }
+  .stage b { display: block; color: var(--fg); font-weight: 600; letter-spacing: .04em; margin-top: .2rem; }
+  .rung-body h3 { margin: 0 0 .35rem; color: var(--fg); font-size: 1rem; }
+  .rung-body p { margin: 0; color: var(--muted); font-size: .95rem; }
+  .cost { padding-top: 4px; }
+  .bar {
+    height: 7px;
+    background: #e3e0d5;
+    position: relative;
+    overflow: hidden;
+    border-radius: 99px;
+    border: 1px solid var(--border);
+  }
+  .bar span { display: block; height: 100%; background: #f54e00; }
+  .rung[data-slow="1"] .bar span { background: var(--warn); }
+  .cost small {
+    display: block;
+    font-family: var(--mono);
+    font-size: .7rem;
+    color: var(--muted);
+    margin-top: .4rem;
+    letter-spacing: .04em;
+  }
+  .dx { list-style: none; padding: 0; margin: 1rem 0 0; counter-reset: dx; }
+  .dx li {
+    counter-increment: dx;
+    border-bottom: 1px solid var(--border);
+    padding: 1rem 0 1rem 3rem;
+    position: relative;
+    margin: 0;
+  }
+  .dx li:last-child { border-bottom: none; }
+  .dx li::before {
+    content: counter(dx, decimal-leading-zero);
+    position: absolute;
+    left: 0;
+    top: 1.1rem;
+    font-family: var(--mono);
+    font-size: .75rem;
+    color: var(--accent);
+    letter-spacing: .06em;
+    font-weight: 600;
+  }
+  .dx q { font-weight: 600; display: block; margin-bottom: .35rem; font-style: normal; color: var(--fg); }
+  .dx q::before, .dx q::after { content: '"'; }
+  .dx p { margin: 0; color: var(--muted); max-width: 72ch; }
+  .codeblock { position: relative; margin: .75rem 0 1.5rem; }
+  .codeblock pre { margin: 0; padding-right: 5.5rem; }
+  .copy {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-family: var(--mono);
+    font-size: .7rem;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    padding: .4rem .65rem;
+    cursor: pointer;
+    background: var(--card);
+    color: var(--muted);
+    border: 1px solid #dcd8cc;
+    border-radius: 6px;
+  }
+  .copy:hover { color: var(--fg); }
+  .copy[data-done="1"] { color: var(--accent); border-color: var(--accent); }
+  .checklist { list-style: none; padding: 0; margin: 1rem 0; }
+  .checklist li {
+    padding: .65rem .85rem .65rem 2.4rem;
+    position: relative;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    margin: .45rem 0;
+    box-shadow: var(--shadow);
+  }
+  .checklist li::before {
+    content: "";
+    position: absolute;
+    left: .85rem;
+    top: .85rem;
+    width: .9rem;
+    height: .9rem;
+    border: 1.5px solid var(--muted);
+    border-radius: 3px;
+  }
+  .flow {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .4rem;
+    align-items: center;
+    margin: 1.25rem 0;
+    font-family: var(--mono);
+    font-size: .78rem;
+  }
+  .flow span {
+    background: var(--card-02);
+    border: 1px solid var(--border);
+    padding: .4rem .65rem;
+    border-radius: 6px;
+  }
+  .flow .arrow { background: none; border: none; color: var(--muted); padding: 0 .1rem; }
+  .flow .gate {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  footer.doc-foot {
+    margin-top: 3rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid #c9c4b5;
+    color: var(--muted);
+    font-size: 12px;
+  }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+  .scroller { overflow-x: auto; margin: 1rem 0; }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+  }
+  @media (max-width: 820px) {
+    nav.toc ol { columns: 1; }
+    .rung { grid-template-columns: 1fr; gap: .6rem; }
+    .cost { max-width: 240px; }
+  }
+
+  .viz {
+    margin: 1.35rem 0 1.6rem;
+  }
+  .viz-kicker {
+    font-size: .7rem;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 700;
+    margin: 0 0 .55rem;
+  }
+  .viz-caption {
+    color: var(--muted);
+    font-size: .82rem;
+    margin: .65rem 0 0;
+    max-width: 72ch;
+  }
+  .nf {
+    display: grid;
+    gap: .55rem;
+    grid-template-columns: repeat(auto-fit, minmax(118px, 1fr));
+    align-items: stretch;
+  }
+  .nf-col { min-width: 0; }
+  .nf-group {
+    font-family: var(--mono);
+    font-size: .65rem;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 .35rem;
+  }
+  .nf-edge {
+    color: var(--accent);
+    font-weight: 600;
+  }
+  .nf-node {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: .65rem .7rem;
+    min-height: 4.4rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 0 0 .4rem;
+    box-shadow: var(--shadow);
+  }
+  .nf-node:last-child { margin-bottom: 0; }
+  .nf-node.accent { border-color: var(--accent); border-width: 2px; }
+  .nf-node.green { border-color: var(--ok); border-width: 2px; }
+  .nf-node.violet { border-color: #6c4bb6; border-width: 2px; }
+  .nf-node.blue { border-color: #3a63c4; }
+  .nf-node.fill-accent { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .nf-node.fill-green { background: var(--ok); border-color: var(--ok); color: #26251e; }
+  .nf-node.fill-violet { background: #6c4bb6; border-color: #6c4bb6; color: #fff; }
+  .nf-kicker {
+    font-family: var(--mono);
+    font-size: .62rem;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 0 0 .25rem;
+    font-weight: 700;
+  }
+  .nf-node.fill-accent .nf-kicker,
+  .nf-node.fill-violet .nf-kicker { color: rgba(255,255,255,.8); }
+  .nf-node.fill-green .nf-kicker { color: rgba(38,37,30,.7); }
+  .nf-label { font-size: .88rem; font-weight: 600; margin: 0; line-height: 1.25; }
+  .nf-detail { font-size: .75rem; color: var(--muted); margin: .25rem 0 0; line-height: 1.35; }
+  .nf-node.fill-accent .nf-detail,
+  .nf-node.fill-violet .nf-detail { color: rgba(255,255,255,.85); }
+  .nf-node.fill-green .nf-detail { color: rgba(38,37,30,.75); }
+  .mp {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: .45rem;
+    margin-bottom: .45rem;
+  }
+  .mp-stage {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: .7rem .55rem;
+    text-align: center;
+    min-height: 5.1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    box-shadow: var(--shadow);
+  }
+  .mp-stage.orch { border: 2px solid var(--accent); }
+  .mp-stage.orch .nf-label { color: var(--accent); }
+  .mp-stage.gate { border: 2px solid var(--ok); }
+  .mp-stage.gate .nf-label { color: var(--ok); }
+  .mp-stage.ext { background: var(--card-03); }
+  .mp-skills {
+    border: 1.5px dashed #f54e00;
+    border-radius: var(--radius);
+    background: #fdeade;
+    padding: .85rem 1rem;
+    margin-top: .35rem;
+  }
+  .mp-skills .nf-kicker { margin-bottom: .35rem; }
+  .mp-skills ul {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: .55rem 1.25rem;
+    list-style: none;
+    padding: 0;
+    margin: .7rem 0 0;
+  }
+  .mp-skills li { margin: 0; }
+  .mp-skills code { font-size: .78rem; }
+  .mechanic {
+    background: var(--card-02);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: .85rem 1rem;
+    margin-top: .65rem;
+  }
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .45rem .9rem;
+    margin-top: .7rem;
+    font-size: .75rem;
+    color: var(--muted);
+  }
+  .legend i {
+    display: inline-block;
+    width: .7rem;
+    height: .7rem;
+    border-radius: 3px;
+    margin-right: .35rem;
+    vertical-align: -1px;
+    border: 1.5px solid var(--border);
+    background: var(--card-03);
+  }
+  .legend .l-orch { border-color: var(--accent); background: transparent; }
+  .legend .l-gate { border-color: var(--ok); background: transparent; }
+  .legend .l-skill { border: 1.5px dashed var(--accent); background: transparent; }
+  .split-viz {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+  .steps {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .4rem;
+    margin: .4rem 0 .75rem;
+  }
+  .steps .st {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: .45rem .65rem;
+    min-width: 5.5rem;
+  }
+  .steps .st b { display: block; font-size: .85rem; }
+  .steps .st small { color: var(--muted); font-size: .72rem; }
+  .steps .st.accent { border-color: var(--accent); }
+  .steps .st.green { border-color: var(--ok); }
+  .steps .st.violet { border-color: #6c4bb6; }
+  .steps .st.blue { border-color: #3a63c4; }
+  .steps .arr { color: var(--muted); }
+  .tdd {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: .45rem;
+    align-items: start;
+  }
+  .tdd-green {
+    display: grid;
+    gap: .35rem;
+  }
+  .tdd-retry {
+    font-family: var(--mono);
+    font-size: .65rem;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: var(--accent);
+    text-align: right;
+  }
+  @media (max-width: 820px) {
+    .mp, .tdd, .split-viz { grid-template-columns: 1fr 1fr; }
+    .mp-skills ul { grid-template-columns: 1fr; }
+  }
+  @media print {
+    html, body { background: var(--bg); color: var(--fg); }
+    .wrap { background: var(--bg); }
+    .viz, .mp-stage, .nf-node, .mp-skills, .mechanic {
+      background: var(--card);
+      border-color: var(--border);
+    }
+    .mp-skills { background: #fdeade; border-color: #f54e00; }
+    .card, nav.toc, .pipeline-step, .rung, table, .checklist li {
+      box-shadow: none; border-color: var(--border); background: var(--card);
+    }
+    .callout { box-shadow: none; background: #fdeade; border-color: var(--border); }
+    pre { box-shadow: none; background: var(--code-bg); color: var(--code-text); border-color: #2b2923; }
+    .eyebrow, .card .num, .pipeline-step .n { color: var(--accent); }
+    h3, a { color: #c43f00; }
+    .lede, .rung-body p, .dx p, .hero-meta, footer.doc-foot { color: var(--muted); }
+    .copy { display: none; }
+    .flow span { background: var(--card-02); }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="hero">
+  <div class="eyebrow">Cursor SA · Engineering playbook</div>
+  <h1>Agentic modernisation framework</h1>
+  <p class="lede">A practical SDLC for refactoring, migrations, and platform upgrades with Cloud Agents — where every change earns merge rights the same way a human PR must: burden of proof already met. Parallelise only behind gates engineers already trust.</p>
+  <div class="hero-meta">
+    <span><b>Plan &amp; Design</b> first</span>
+    <span><b>9</b> agent roles</span>
+    <span>Bugbot + Security Agents</span>
+    <span>Single file · Aug 2026</span>
+  </div>
+</header>
+
+<nav class="toc" aria-label="Contents">
+  <strong>Contents</strong>
+  <ol>
+    <li><a href="#when">When to use this</a></li>
+    <li><a href="#sdlc">SDLC: Plan and Design</a></li>
+    <li><a href="#agents">Agent roster</a></li>
+    <li><a href="#handoffs">Handoff contracts</a></li>
+    <li><a href="#verify">Verification ladder</a></li>
+    <li><a href="#review">Bugbot and Security</a></li>
+    <li><a href="#mcp">MCP and Automations</a></li>
+    <li><a href="#playbook">Slice / strangler playbook</a></li>
+    <li><a href="#practices">Migration best practices</a></li>
+    <li><a href="#gates">Human gates and evidence</a></li>
+    <li><a href="#prompts">Prompt skeletons</a></li>
+    <li><a href="#anti">Anti-patterns</a></li>
+    <li><a href="#dx">Onboarding diagnostic</a></li>
+  </ol>
+</nav>
+
+<section id="when">
+  <h2>1. When to use this framework</h2>
+  <p>Pick a north star before launching agents. Mixing strategies randomly is how migrations stall.</p>
+  <div class="grid">
+    <div class="card">
+      <span class="num">01</span>
+      <h4>Modular monolith</h4>
+      <p class="meta">Often the right first step</p>
+      <p>Clear packages, enforced boundaries, same deployable. Use when the domain is still one product and ops cost of many services is not justified.</p>
+    </div>
+    <div class="card">
+      <span class="num">02</span>
+      <h4>Service extraction</h4>
+      <p class="meta">Strangler at the edge</p>
+      <p>Peel one bounded context with API + data ownership. Requires contract tests, flags, and a data cutover plan before code moves.</p>
+    </div>
+    <div class="card">
+      <span class="num">03</span>
+      <h4>Platform upgrade</h4>
+      <p class="meta">Same shape, newer runtime</p>
+      <p>Java LTS, Spring Boot major, Node LTS, framework bumps. Characterisation tests and dual-run matter more than new architecture diagrams.</p>
+    </div>
+    <div class="card">
+      <span class="num">04</span>
+      <h4>Language / stack migration</h4>
+      <p class="meta">Highest risk</p>
+      <p>COBOL→Java, Perl→Go, etc. Comprehension and characterisation first. Hard profiles (HIL, mainframe) often cannot run agent-invoked tests — set that expectation before the pilot.</p>
+    </div>
+  </div>
+  <div class="callout">
+    <strong>Thesis:</strong> Agents raise the volume of diffs. Tests and CI become more important, not less. Velocity without gates is how regressions scale.
+  </div>
+</section>
+
+<section id="sdlc">
+  <h2>2. SDLC: Plan and Design before conversion</h2>
+  <p>The conversion agents only run after a human-approved plan. Cursor <strong>Plan Mode</strong> (Shift+Tab / <code>/plan</code>) is the product surface — agents do not invent org architecture in silence.</p>
+
+  <div class="flow" aria-label="SDLC phases">
+    <span>Discover</span><span class="arrow">→</span>
+    <span>Plan</span><span class="arrow">→</span>
+    <span>Design</span><span class="arrow">→</span>
+    <span class="gate">Human gate</span><span class="arrow">→</span>
+    <span>Build</span><span class="arrow">→</span>
+    <span>Verify</span><span class="arrow">→</span>
+    <span>Review</span><span class="arrow">→</span>
+    <span>Release</span>
+  </div>
+
+  <div class="scroller">
+    <table>
+      <thead>
+        <tr><th>Phase</th><th>Human owns</th><th>Agent owns</th><th>Cursor surface</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Discover</td>
+          <td>Scope, systems of record</td>
+          <td>Process tree, binaries, deps, connectivity</td>
+          <td>Scout Cloud Agent (docs-only PR)</td>
+        </tr>
+        <tr>
+          <td>Plan</td>
+          <td>North star, risk appetite, stop conditions</td>
+          <td>Options, slice map, effort, sequencing</td>
+          <td>Plan Mode → <code>PLAN.md</code> in repo</td>
+        </tr>
+        <tr>
+          <td>Design</td>
+          <td>ADR sign-off, data/cutover strategy</td>
+          <td>Boundaries, contracts, flags</td>
+          <td>Plan Mode + ADR markdown PR</td>
+        </tr>
+        <tr>
+          <td>Build</td>
+          <td>Path ownership, merge train</td>
+          <td>Conversion slices, parallel sub-agents</td>
+          <td>Cloud Agents + skills/rules</td>
+        </tr>
+        <tr>
+          <td>Verify</td>
+          <td>Which suites block merge</td>
+          <td>Generate + execute tests both sides</td>
+          <td>Agent write loop + CI</td>
+        </tr>
+        <tr>
+          <td>Review</td>
+          <td>Intent, rollout, residual risk</td>
+          <td>Bugbot + Security Reviewer on every PR</td>
+          <td>Automations · <code>/review-bugbot</code> · <code>/review-security</code></td>
+        </tr>
+        <tr>
+          <td>Release</td>
+          <td>Go / no-go</td>
+          <td>Evidence pack, flags, smoke, observe</td>
+          <td>Validation agent + CD</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+
+  <figure class="viz" aria-label="Same SDLC for migration">
+    <p class="viz-kicker">From Legacy apps with Cursor · Same SDLC</p>
+    <div class="nf">
+      <div class="nf-col"><p class="nf-group">1 · Plan</p><div class="nf-node fill-violet"><p class="nf-kicker">Plan Mode</p><p class="nf-label">Align · seams</p><p class="nf-detail">Plan Mode · coexistence</p></div></div>
+      <div class="nf-col"><p class="nf-group"><span class="nf-edge">slice</span> · 2 · Design</p><div class="nf-node violet"><p class="nf-kicker">Map</p><p class="nf-label">Seam + slice</p><p class="nf-detail">lever secondary</p></div></div>
+      <div class="nf-col"><p class="nf-group"><span class="nf-edge">decide</span> · 3 · Human</p><div class="nf-node accent"><p class="nf-kicker">Human</p><p class="nf-label">In the loop</p><p class="nf-detail">arch · state · data</p></div></div>
+      <div class="nf-col"><p class="nf-group"><span class="nf-edge">build</span> · 4 · TDD</p><div class="nf-node accent"><p class="nf-kicker">/tdd</p><p class="nf-label">Characterise → fix</p><p class="nf-detail">fixture kill</p></div></div>
+      <div class="nf-col"><p class="nf-group"><span class="nf-edge">pre-push</span> · 5 · Review</p><div class="nf-node blue"><p class="nf-kicker">Inner</p><p class="nf-label">thermos / /review</p><p class="nf-detail">before push</p></div></div>
+      <div class="nf-col"><p class="nf-group"><span class="nf-edge">open</span> · 6 · PR</p><div class="nf-node blue"><p class="nf-kicker">PR</p><p class="nf-label">Create PR</p><p class="nf-detail">/autopilot ready only</p></div></div>
+      <div class="nf-col"><p class="nf-group"><span class="nf-edge">on PR</span> · 7 · Outer</p><div class="nf-node green"><p class="nf-kicker">Bugbot</p><p class="nf-label">Bugbot + Autofix</p><p class="nf-detail">capped · then human merges</p></div></div>
+    </div>
+    <p class="viz-caption">Inner delivery loop first. Agents never merge. Codify once after the seed soak — not on every fan-out PR.</p>
+  </figure>
+
+  <div class="callout warn">
+    <strong>Hard human gates</strong> (agents stop): Plan/ADR approval; first production cutover; deleting a legacy path; any intentional behaviour change mixed into a structural PR.
+  </div>
+</section>
+
+<section id="agents">
+  <h2>3. Agent roster and orchestration</h2>
+  <p><strong>Orchestration is required.</strong> It never writes production code. It holds run state, spawns the next agent with the previous artefact, and refuses to skip gates.</p>
+
+
+  <figure class="viz" aria-label="Migration pipeline">
+    <p class="viz-kicker">From components · MigrationPipeline</p>
+    <div class="mp">
+      <div class="mp-stage ext"><p class="nf-label">Linear ticket</p><p class="nf-detail">one per service · the trigger</p></div>
+      <div class="mp-stage orch"><p class="nf-label">Generation Agent</p><p class="nf-detail">scripts + LLM · builds · self-corrects · opens draft PR</p></div>
+      <div class="mp-stage"><p class="nf-label">Draft PR</p><p class="nf-detail">opened + labelled</p></div>
+      <div class="mp-stage orch"><p class="nf-label">Validation Agent</p><p class="nf-detail">deploys · integration tests · patches CI ≤ 3×</p></div>
+      <div class="mp-stage ext"><p class="nf-label">CI / deploy / tests</p><p class="nf-detail">test + quality gates</p></div>
+      <div class="mp-stage gate"><p class="nf-label">Human review</p><p class="nf-detail">approves and merges, always</p></div>
+    </div>
+    <div class="mp-skills">
+      <p class="nf-kicker">Shared skill library</p>
+      <p class="nf-detail">Skills library codifies breaking changes between version A and version B so agents are proficient at finding and fixing them.</p>
+      <ul>
+        <li><code>micronaut-4-nullability</code><p class="nf-detail">nullable receiver → requireNotNull or ?.let</p></li>
+        <li><code>mapstruct-injection</code><p class="nf-detail">broken bean wiring → fix generated mapper injection</p></li>
+        <li><code>graphql-rewrites</code><p class="nf-detail">dependency upgrade → patch nullable return call sites</p></li>
+        <li><code>timestamp-drift</code><p class="nf-detail">serialisation precision changed → pin the format</p></li>
+      </ul>
+      <p class="nf-detail" style="margin-top:.55rem;font-style:italic">+7 more skills · ktlint · proxy interception · YAML config …</p>
+    </div>
+    <div class="mechanic">
+      <p class="nf-kicker">The mechanic</p>
+      <p style="margin:.35rem 0 0">On any failure: <strong>classify → load one of 11 skills → fix → verify</strong>, up to 3 tries. Then a clean, human-readable report, fully autonomously.</p>
+    </div>
+    <div class="legend">
+      <span><i class="l-orch"></i>Orchestrator agent</span>
+      <span><i></i>Cursor surface / existing tools</span>
+      <span><i class="l-gate"></i>Human gate</span>
+      <span><i class="l-skill"></i>Skill (on-demand)</span>
+    </div>
+    <p class="viz-caption">Sourced pattern (Brex Micronaut 3→4 public write-up). Trigger, gates, and skills are reusable. Humans still merge.</p>
+  </figure>
+
+  <div class="flow" aria-label="Agent pipeline">
+    <span>Orch</span><span class="arrow">→</span>
+    <span>Discovery</span><span class="arrow">→</span>
+    <span>Plan/Design</span><span class="arrow">→</span>
+    <span class="gate">Gate</span><span class="arrow">→</span>
+    <span>Test gen</span><span class="arrow">→</span>
+    <span>Test exec</span><span class="arrow">→</span>
+    <span>Conversion</span><span class="arrow">→</span>
+    <span>Dual-run</span><span class="arrow">→</span>
+    <span>Bugbot</span><span class="arrow">→</span>
+    <span>Security</span><span class="arrow">→</span>
+    <span>Validation</span><span class="arrow">→</span>
+    <span class="gate">Sign-off</span>
+  </div>
+
+  <div class="pipeline">
+    <div class="pipeline-step">
+      <div class="n">0</div>
+      <div>
+        <strong>Orchestration agent</strong>
+        <p>Owns <code>RUNBOOK.md</code>: phase, owners, path allowlists, stop conditions, merge-train branch. Spawns specialists; serialises conflict/CI fix (one agent). Never edits production code.</p>
+      </div>
+    </div>
+    <div class="pipeline-step">
+      <div class="n">1</div>
+      <div>
+        <strong>Discovery agent</strong>
+        <p>Documents process tree, binaries, manifests/lockfiles, verify command, connectivity, hottest packages, non-overlapping slice proposals → <code>LEGACY_MAP.md</code>. Docs-only PR.</p>
+      </div>
+    </div>
+    <div class="pipeline-step">
+      <div class="n">2</div>
+      <div>
+        <strong>Plan &amp; Design agent</strong>
+        <p>Produces <code>PLAN.md</code> + ADR (modular monolith vs extract vs platform upgrade; data strategy; flags; rollback). Human must accept before tests or conversion.</p>
+      </div>
+    </div>
+    <div class="pipeline-step">
+      <div class="n">3</div>
+      <div>
+        <strong>Test generation agent</strong>
+        <p>Characterisation, unit, integration, thin UAT/E2E for revenue paths. Tests-only PRs. Do not “fix” legacy bugs in this phase.</p>
+      </div>
+    </div>
+    <div class="pipeline-step">
+      <div class="n">4</div>
+      <div>
+        <strong>Test execution agent</strong>
+        <p>Runs the same suite against <strong>legacy and modernised</strong>; stores reports; fails the runbook on drift. Inner loop = format → lint → types → unit. CI is source of truth.</p>
+      </div>
+    </div>
+    <div class="pipeline-step">
+      <div class="n">5</div>
+      <div>
+        <strong>Conversion agent</strong>
+        <p>Executes migration with skills and rules; hard path allowlist; spawns parallel slice sub-agents (typically 3–6). One mergeable PR per slice. Merge shepherd is serial when files collide.</p>
+      </div>
+    </div>
+    <div class="pipeline-step">
+      <div class="n">6</div>
+      <div>
+        <strong>Bugbot</strong>
+        <p>Every conversion PR via Automations; <code>/review-bugbot</code> before push. Beside CI, not instead of it. Autofix → Cloud Agent on a <strong>new branch</strong> (recommended).</p>
+      </div>
+    </div>
+    <div class="pipeline-step">
+      <div class="n">7</div>
+      <div>
+        <strong>Security Agents</strong>
+        <p><strong>Security Reviewer</strong> on each PR; <strong>Vulnerability Scanner</strong> on a cron against the integration branch. Wire findings via MCP. Complements — does not replace — dependency CVE scanning.</p>
+      </div>
+    </div>
+    <div class="pipeline-step">
+      <div class="n">8</div>
+      <div>
+        <strong>Validation agent</strong>
+        <p>Evidence pack for human sign-off: dual-run reports, Bugbot/security summaries, ADR + change notes, rollback, observability delta.</p>
+      </div>
+    </div>
+  </div>
+
+  <h3>How many agents?</h3>
+  <table>
+    <thead><tr><th>Phase</th><th>Typical parallelism</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td>Scout / map</td><td>1–2</td><td>Read-heavy; one writer for the doc</td></tr>
+      <tr><td>Characterisation tests</td><td>2–4</td><td>Split by package; no overlapping files</td></tr>
+      <tr><td>Structural slices</td><td>3–6</td><td>Hard path ownership; daily merge train</td></tr>
+      <tr><td>Conflict / CI fix</td><td>1</td><td>Serialise on shared files</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="handoffs">
+  <h2>4. Handoff contracts</h2>
+  <p>Each agent emits a <strong>named markdown artefact</strong> the next one must consume — not a chat transcript.</p>
+  <table>
+    <thead><tr><th>Agent</th><th>Artefact</th><th>Must include</th></tr></thead>
+    <tbody>
+      <tr><td>Orchestration</td><td><code>RUNBOOK.md</code></td><td>Phase, owners, allowlists, stop conditions, merge-train branch</td></tr>
+      <tr><td>Discovery</td><td><code>docs/architecture/LEGACY_MAP.md</code></td><td>Entrypoints, deps, verify command, CI paths, slice proposals</td></tr>
+      <tr><td>Plan &amp; Design</td><td><code>PLAN.md</code> + <code>docs/adr/NNNN-*.md</code></td><td>North star, data strategy, flags, rollback, acceptance criteria</td></tr>
+      <tr><td>Test generation</td><td>Test PRs + inventory in runbook</td><td>Behaviours locked; layers covered; intentional non-fixes listed</td></tr>
+      <tr><td>Test execution</td><td><code>evidence/reports/</code></td><td>Legacy vs modern results; pass/fail; command + commit SHAs</td></tr>
+      <tr><td>Conversion</td><td>Slice PRs</td><td>Path allowlist, DoD checklist, before/after structure</td></tr>
+      <tr><td>Bugbot / Security</td><td>PR comments + summaries</td><td>Severity, location, resolution status</td></tr>
+      <tr><td>Validation</td><td><code>evidence/EVIDENCE_PACK.md</code></td><td>All of the above + go/no-go recommendation</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Example runbook frontmatter</h3>
+  <div class="codeblock">
+    <button class="copy" data-target="runbook-fm">Copy</button>
+    <pre id="runbook-fm"><code>---
+phase: conversion
+merge_train: refactor/integration
+stop_conditions:
+  - plan_unapproved
+  - dual_run_drift
+  - overlapping_paths
+path_ownership:
+  owners: ["src/**/owner/**", "tests/**/owner/**"]
+  visits: ["src/**/visit/**", "tests/**/visit/**"]
+verify_command: "./mvnw test"
+human_gates_pending: []
+---</code></pre>
+  </div>
+</section>
+
+<section id="verify">
+  <h2>5. Verification ladder and PR definition of done</h2>
+
+  <figure class="viz" aria-label="Test-driven development flow">
+    <p class="viz-kicker">From components · TestDrivenDevelopmentFlow · and /tdd on the legacy deck</p>
+    <div class="tdd">
+      <div class="nf-col"><p class="nf-group">1 · Implement</p><div class="nf-node fill-violet"><p class="nf-kicker">Root</p><p class="nf-label">Frontier orchestrator</p><p class="nf-detail">Orchestrate the implementation</p></div></div>
+      <div class="nf-col"><p class="nf-group">2 · Red</p><div class="nf-node"><p class="nf-kicker">Composer</p><p class="nf-label">Failing test</p><p class="nf-detail">Write the test first</p></div></div>
+      <div class="nf-col">
+        <p class="nf-group">3 · Green</p>
+        <div class="tdd-green">
+          <div class="nf-node"><p class="nf-kicker">Composer</p><p class="nf-label">Implementation</p><p class="nf-detail">Make the test green</p></div>
+          <p class="tdd-retry">retry until green</p>
+          <div class="nf-node fill-green"><p class="nf-kicker">Hook</p><p class="nf-label">Lint + unit tests</p><p class="nf-detail">Fail closed · fail → pass</p></div>
+        </div>
+      </div>
+      <div class="nf-col"><p class="nf-group">4 · Review</p><div class="nf-node"><p class="nf-kicker">Code review</p><p class="nf-label">Review the diff</p><p class="nf-detail">One review pass</p></div></div>
+      <div class="nf-col"><p class="nf-group">5 · Create PR</p><div class="nf-node"><p class="nf-kicker">PR</p><p class="nf-label">Create PR</p><p class="nf-detail">/autopilot</p></div></div>
+      <div class="nf-col"><p class="nf-group">6 · CI/CD</p><div class="nf-node"><p class="nf-kicker">CI</p><p class="nf-label">CI/CD</p><p class="nf-detail">Bugbot reviews the PR</p></div></div>
+    </div>
+    <p class="viz-caption">The hook is the test runner and the linter. Review is a code review pass. Composer does not own the orchestration. For migration, /tdd is characterisation-first: freeze High paths before you move traffic.</p>
+  </figure>
+
+  <p>Cheap checks run constantly; expensive checks run at gates. Teams that invert this stop running tests. The “fast four” — format, lint, type check, unit tests — are the agent write loop.</p>
+
+  <div class="ladder">
+    <div class="rung">
+      <div class="stage">On save<b>Pre-commit</b></div>
+      <div class="rung-body"><h3>Formatter</h3><p>Whitespace and style only — never behaviour. Removes an entire category of review argument.</p></div>
+      <div class="cost"><div class="bar"><span style="width:3%"></span></div><small>&lt; 1s · every save</small></div>
+    </div>
+    <div class="rung">
+      <div class="stage">On save<b>Pre-commit · CI</b></div>
+      <div class="rung-body"><h3>Linter</h3><p>Suspicious patterns agents invent: unused vars, unreachable branches, known anti-patterns.</p></div>
+      <div class="cost"><div class="bar"><span style="width:8%"></span></div><small>Seconds · every commit</small></div>
+    </div>
+    <div class="rung">
+      <div class="stage">On save<b>CI</b></div>
+      <div class="rung-body"><h3>Type checker</h3><p>Contracts between functions. Missing in many Python/JS codebases — which is why those repos are harder for agents to change safely.</p></div>
+      <div class="cost"><div class="bar"><span style="width:12%"></span></div><small>Seconds · every commit</small></div>
+    </div>
+    <div class="rung">
+      <div class="stage">Pre-commit<b>Every CI run</b></div>
+      <div class="rung-body"><h3>Unit tests</h3><p>Pyramid base. The layer an agent can most usefully run on its own before a human sees the work.</p></div>
+      <div class="cost"><div class="bar"><span style="width:20%"></span></div><small>Seconds to a minute</small></div>
+    </div>
+    <div class="rung">
+      <div class="stage">Pull request<b>Every CI run</b></div>
+      <div class="rung-body"><h3>Integration tests</h3><p>Real DB, queue, HTTP. Catches wiring mistakes after extractions.</p></div>
+      <div class="cost"><div class="bar"><span style="width:42%"></span></div><small>Minutes · per PR</small></div>
+    </div>
+    <div class="rung" data-slow="1">
+      <div class="stage">Pre-merge<b>Nightly</b></div>
+      <div class="rung-body"><h3>End-to-end / UAT</h3><p>Scarce. Keep for revenue paths. Smoke may gate the PR; full suite often post-merge.</p></div>
+      <div class="cost"><div class="bar"><span style="width:78%"></span></div><small>Many minutes · gated</small></div>
+    </div>
+    <div class="rung">
+      <div class="stage">Pull request<b>Scheduled</b></div>
+      <div class="rung-body"><h3>Security &amp; dependency scanning</h3><p>SAST (Security Agents / Bugbot rules) + CVE/licence scanners (Snyk, Trivy, GHAS). Installing a package never checks either.</p></div>
+      <div class="cost"><div class="bar"><span style="width:26%"></span></div><small>Seconds to minutes</small></div>
+    </div>
+    <div class="rung" data-slow="1">
+      <div class="stage">Pre-release<b>Nightly</b></div>
+      <div class="rung-body"><h3>Performance &amp; load</h3><p>Latency and throughput under stress. Usually where migrations fail late and expensively.</p></div>
+      <div class="cost"><div class="bar"><span style="width:100%"></span></div><small>Long · pre-release</small></div>
+    </div>
+  </div>
+
+  <h3>Enforcement layers</h3>
+  <div class="grid">
+    <div class="card">
+      <span class="num">Layer 1</span>
+      <h4>Editor — on save</h4>
+      <p><code>.vscode/settings.json</code>: format and auto-fixable lint for whoever wrote the file.</p>
+    </div>
+    <div class="card">
+      <span class="num">Layer 2</span>
+      <h4>Cursor rule — after edits</h4>
+      <p>Agent runs the fast four after changing code. Glob-scoped per language; always-on verification rule stays short.</p>
+    </div>
+    <div class="card">
+      <span class="num">Layer 3</span>
+      <h4>Hook — pre-commit</h4>
+      <p>Backstop for anyone who bypassed the first two. Keep it fast or people use <code>--no-verify</code>.</p>
+    </div>
+  </div>
+  <p>Also write <code>AGENTS.md</code> at the repo root so multi-tool agent ecosystems share the same verification instructions. Pair with <code>.cursor/BUGBOT.md</code> for review rules.</p>
+
+  <div class="callout">
+    <strong>Definition of done for an agent PR:</strong> format + lint/types + unit (touched packages) green locally; CI green on the PR; characterisation or new tests for any behaviour you intended to keep; no drive-by refactors outside the slice; Bugbot and Security Reviewer have run (or are required checks).
+  </div>
+</section>
+
+<section id="review">
+  <h2>6. Bugbot and Security Agents in the merge path</h2>
+  <p>Human review shifts up: boundaries, data migration, rollout risk — not “does it compile?” AI review sits <strong>beside</strong> required status checks.</p>
+
+  <div class="grid">
+    <div class="card">
+      <span class="num">Bugbot</span>
+      <h4>PR review for bugs and quality</h4>
+      <p>Automatic on PR updates, or <code>cursor review</code> / <code>bugbot run</code>. Locally: <code>/review-bugbot</code> before push (syncs via patch ID with SCM review).</p>
+      <p class="meta">Optional: require <code>Cursor Bugbot</code> check; enable fail-on-unresolved if available. Autofix → new branch, max attempts capped.</p>
+    </div>
+    <div class="card">
+      <span class="num">Security Reviewer</span>
+      <h4>PR security gate</h4>
+      <p>Automations on PR events. Locally: <code>/review-security</code>. Catches injection, authz gaps, unsafe patterns introduced by conversion.</p>
+    </div>
+    <div class="card">
+      <span class="num">Vulnerability Scanner</span>
+      <h4>Cron on integration branch</h4>
+      <p>Finds long-standing issues PR bots miss. Schedule against the merge-train branch during active modernisation.</p>
+    </div>
+    <div class="card">
+      <span class="num">Rules</span>
+      <h4>.cursor/BUGBOT.md</h4>
+      <p>Migration-specific: no drive-by refactors; tests required for backend; licence scan on lockfile edits; flag eval/exec and secret patterns.</p>
+    </div>
+  </div>
+
+  <div class="callout warn">
+    <strong>Trust CI, not the model’s claim that tests passed.</strong> Required status checks protect <code>main</code>. Bugbot findings default to neutral unless you configure fail-on-unresolved — know which behaviour your org has.
+  </div>
+</section>
+
+<section id="mcp">
+  <h2>7. MCP and Automations map</h2>
+  <p>Suggest, do not require. Least privilege; secrets in the Cloud Agent dashboard — never git. Treat <code>mcp.json</code> like Terraform.</p>
+
+  <table>
+    <thead><tr><th>SDLC phase</th><th>Suggested MCP / integrations</th><th>Purpose</th></tr></thead>
+    <tbody>
+      <tr><td>Plan / Design</td><td>Linear or Jira, GitHub, Notion/Confluence</td><td>Tickets, cycles, ADR corpus</td></tr>
+      <tr><td>Discover</td><td>GitHub, Datadog/Grafana, Sentry, cloud/Terraform, dbt</td><td>Who calls what, error hotspots, topology</td></tr>
+      <tr><td>Build</td><td>GitHub PR tools, feature-flag admin</td><td>Open/update slice PRs, flag cutovers</td></tr>
+      <tr><td>Verify</td><td>GitHub Checks, Playwright/browser, computer-use</td><td>CI truth, scarce UAT, recorded smoke</td></tr>
+      <tr><td>Review</td><td>Bugbot tools, Security → Slack + issue tracker; GHAS/Snyk</td><td>Findings routing; CVE complement</td></tr>
+      <tr><td>Release</td><td>Slack/Teams, PagerDuty, Datadog/Sentry, change webhook</td><td>Go/no-go, cutover window, baseline vs after</td></tr>
+    </tbody>
+  </table>
+
+
+  <figure class="viz" aria-label="/loop versus Automations">
+    <p class="viz-kicker">From Legacy apps with Cursor · /loop vs Automations</p>
+    <div class="split-viz">
+      <div class="card">
+        <p class="nf-kicker">/loop · inner session</p>
+        <div class="steps">
+          <div class="st accent"><b>Prompt</b><small>every 5m / event</small></div>
+          <span class="arr">→</span>
+          <div class="st blue"><b>Watch</b><small>deploy · suite</small></div>
+          <span class="arr">→</span>
+          <div class="st green"><b>You stop it</b></div>
+        </div>
+        <p class="nf-detail">t+0 run · t+5m run · close laptop → dies. Good for alt-tab work on the first slice. Not scheduled maintain-verify.</p>
+      </div>
+      <div class="card">
+        <p class="nf-kicker">Automations · outer loop</p>
+        <div class="steps">
+          <div class="st violet"><b>Trigger</b><small>schedule / webhook</small></div>
+          <span class="arr">→</span>
+          <div class="st accent"><b>Cloud Agent</b><small>fan-out · maintain</small></div>
+          <span class="arr">→</span>
+          <div class="st blue"><b>verify-app</b><small>prove still green</small></div>
+          <span class="arr">→</span>
+          <div class="st green"><b>PR / handoff</b><small>human still merges</small></div>
+        </div>
+        <p class="nf-detail">Overnight fan-out and maintain-verify, only while verify is green. Still a human merge.</p>
+      </div>
+    </div>
+  </figure>
+
+  <h3>Automations as event-driven orchestration</h3>
+  <ul>
+    <li><strong>PR opened / pushed</strong> → Bugbot + Security Reviewer</li>
+    <li><strong>CI failed</strong> → triage / fix agent (serial; path-aware)</li>
+    <li><strong>Linear status → Ready</strong> → spawn next approved slice</li>
+    <li><strong>Nightly cron</strong> → Vulnerability Scanner + evidence refresh</li>
+    <li><strong>PagerDuty / Sentry</strong> → investigate during cutover window</li>
+  </ul>
+  <div class="callout">
+    <strong>Cloud Agent environment is a prerequisite.</strong> An unset env is like not giving engineers a computer. Confirm one “hello” agent can open a trivial PR that stays green before fanning out slices.
+  </div>
+</section>
+
+<section id="playbook">
+  <h2>8. Slice / strangler playbook</h2>
+
+  <figure class="viz" aria-label="Coexistence patterns">
+    <p class="viz-kicker">From Legacy apps with Cursor · Discovery and strategy</p>
+    <div class="nf" style="grid-template-columns: repeat(3, minmax(0, 1fr));">
+      <div class="nf-node"><p class="nf-kicker">01</p><p class="nf-label">Strangler</p><p class="nf-detail">Intercept at an edge. Online ladder is shadow → canary → soak → flip.</p></div>
+      <div class="nf-node"><p class="nf-kicker">02</p><p class="nf-label">Branch by abstraction</p><p class="nf-detail">Flip the binding behind a seam. Do not invent a new pattern per slice.</p></div>
+      <div class="nf-node"><p class="nf-kicker">03</p><p class="nf-label">Parallel run</p><p class="nf-detail">Same inputs, two systems. Dual-run belongs to batch, not the online canary ladder.</p></div>
+    </div>
+    <p class="viz-caption">Name the coexistence pattern as a standard. The lever (codemod / script) is not the plan. Traffic move is not data ownership — two switches.</p>
+  </figure>
+
+  <div class="pipeline">
+    <div class="pipeline-step">
+      <div class="n">0</div>
+      <div>
+        <strong>Prep the Cloud Agent environment</strong>
+        <p>Connect SCM. Configure env so deps install and the project test command runs. Secrets via dashboard. Smoke-test a docs-only PR.</p>
+      </div>
+    </div>
+    <div class="pipeline-step">
+      <div class="n">1</div>
+      <div>
+        <strong>Map the system</strong>
+        <p>1–2 scout agents → architecture brief. Output = markdown + diagrams. No behaviour change.</p>
+      </div>
+    </div>
+    <div class="pipeline-step">
+      <div class="n">2</div>
+      <div>
+        <strong>Raise the safety net</strong>
+        <p>Parallel characterisation / unit tests on seams you’ll cut. Many small PRs. No production refactors except minimal testability (called out).</p>
+      </div>
+    </div>
+    <div class="pipeline-step">
+      <div class="n">3</div>
+      <div>
+        <strong>Draw target boundaries</strong>
+        <p>Human decides north star. One-page ADR. Agents do not invent architecture in silence.</p>
+      </div>
+    </div>
+    <div class="pipeline-step">
+      <div class="n">4</div>
+      <div>
+        <strong>Fan out slice agents</strong>
+        <p>One Cloud Agent per bounded context, own branch, hard path allowlist. Independently mergeable PRs; feature-flagged if risky.</p>
+      </div>
+    </div>
+    <div class="pipeline-step">
+      <div class="n">5</div>
+      <div>
+        <strong>Integrate on a train</strong>
+        <p>Merge green slices frequently into an integration branch (or main behind flags). Re-run full CI. One merge shepherd — don’t let five agents fight the same files.</p>
+      </div>
+    </div>
+    <div class="pipeline-step">
+      <div class="n">6</div>
+      <div>
+        <strong>Harden, observe, then delete</strong>
+        <p>Integration/E2E for new boundaries; flag cutovers; watch metrics. Bugbot + Security on PRs. Only then delete dead legacy paths.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="practices">
+  <h2>9. Migration best practices (beyond the companion notes)</h2>
+  <div class="grid">
+    <div class="card">
+      <h4>Expand / contract</h4>
+      <p>Parallel change for APIs and schemas. Never break callers in the same PR as a rename. Add → migrate consumers → remove.</p>
+    </div>
+    <div class="card">
+      <h4>Branch by abstraction</h4>
+      <p>Sibling of strangler when you cannot route at the edge. Introduce a seam, swap implementations behind it, delete the old path last.</p>
+    </div>
+    <div class="card">
+      <h4>Data migration sequence</h4>
+      <p>Expand schema → dual-write → backfill → dual-read → drop. Idempotent, replayable jobs. Version every migration.</p>
+    </div>
+    <div class="card">
+      <h4>Shadow / dark launch</h4>
+      <p>Send production traffic to the new path, compare outputs, do not cut over on green unit tests alone.</p>
+    </div>
+    <div class="card">
+      <h4>Feature flags + kill switch</h4>
+      <p>Prove in production (or flagged + smoke) before deleting legacy. Instant rollback without a revert train.</p>
+    </div>
+    <div class="card">
+      <h4>Contract tests at seams</h4>
+      <p>OpenAPI snapshots, Pact, or consumer-driven contracts so slice agents cannot silently break neighbours.</p>
+    </div>
+    <div class="card">
+      <h4>Observability before code</h4>
+      <p>Golden signals, error budget, log/trace IDs. Validation compares after vs before — not vibes.</p>
+    </div>
+    <div class="card">
+      <h4>Performance baseline</h4>
+      <p>Same hardware shape. The top rung of the ladder is usually where migrations fail late.</p>
+    </div>
+    <div class="card">
+      <h4>Compatibility window</h4>
+      <p>Consumer versioning; freeze unrelated dependency churn during a slice.</p>
+    </div>
+    <div class="card">
+      <h4>SBOM + lockfile CI</h4>
+      <p><code>npm ci</code> not <code>npm install</code>. The lockfile is the guarantee. Installing is not vetting.</p>
+    </div>
+    <div class="card">
+      <h4>Secrets and env parity</h4>
+      <p>Cloud Agent image ≈ CI image. Dashboard secrets. No <code>.env</code> in git.</p>
+    </div>
+    <div class="card">
+      <h4>Split behaviour from structure</h4>
+      <p>Do not mix product behaviour change with structural refactor. Impossible to review — split PRs.</p>
+    </div>
+    <div class="card">
+      <h4>Coverage is not quality</h4>
+      <p>Easy to game. Pair with change-failure rate and time to restore.</p>
+    </div>
+    <div class="card">
+      <h4>Hard profiles</h4>
+      <p>C/C++ HIL, COBOL: comprehension and characterisation first. Agents often cannot invoke the rig at all.</p>
+    </div>
+    <div class="card">
+      <h4>Merge train + shepherd</h4>
+      <p>Daily rebase cadence; one serial agent when paths overlap. Conflict hell is an ownership failure.</p>
+    </div>
+    <div class="card">
+      <h4>Rollback in the evidence pack</h4>
+      <p>A runbook, not a slide. Flags, data reverse path, and who pages whom.</p>
+    </div>
+  </div>
+</section>
+
+<section id="gates">
+  <h2>10. Human gates and evidence pack</h2>
+
+  <figure class="viz" aria-label="Inner and outer review">
+    <p class="viz-kicker">From Legacy apps with Cursor · Inner and outer review</p>
+    <div class="nf" style="grid-template-columns: repeat(4, minmax(0, 1fr));">
+      <div class="nf-col"><div class="nf-node"><p class="nf-kicker">You</p><p class="nf-label">thermos / /review</p><p class="nf-detail">before you push</p></div></div>
+      <div class="nf-col"><div class="nf-node fill-accent"><p class="nf-kicker">Cursor</p><p class="nf-label">thermos</p><p class="nf-detail">fans parallel reviews</p></div></div>
+      <div class="nf-col"><div class="nf-node blue"><p class="nf-kicker">Subagent</p><p class="nf-label">Branch review</p><p class="nf-detail">bugs · breakages · security</p></div></div>
+      <div class="nf-col"><div class="nf-node green"><p class="nf-kicker">Outer</p><p class="nf-label">Bugbot on the PR</p><p class="nf-detail">human still merges</p></div></div>
+    </div>
+    <p class="viz-caption">Inner review is pre-push. Outer review is on the PR. Do not treat green CI as done — live-path evidence is still required.</p>
+  </figure>
+
+  <h3>Agents must stop for</h3>
+  <ul class="checklist">
+    <li>Plan / ADR not yet accepted by a human owner</li>
+    <li>First production cutover (or first traffic to a new path)</li>
+    <li>Deleting a legacy path or shutting off dual-write</li>
+    <li>Intentional behaviour change mixed into a structural PR — split first</li>
+    <li>Dual-run drift unresolved (legacy vs modern disagree)</li>
+    <li>Unresolved high-severity Security or Bugbot findings (per org policy)</li>
+  </ul>
+
+  <h3>Evidence pack checklist</h3>
+  <ul class="checklist">
+    <li><code>LEGACY_MAP.md</code> + approved <code>PLAN.md</code> / ADR</li>
+    <li>Characterisation + unit/integration inventory; tests-only PRs merged</li>
+    <li>Dual-run reports (legacy SHA vs modern SHA) with identical command</li>
+    <li>CI green on merge-train; required checks listed</li>
+    <li>Bugbot summary (findings + resolutions)</li>
+    <li>Security Reviewer + Vulnerability Scanner summaries</li>
+    <li>Observability baseline vs after (golden signals)</li>
+    <li>Feature-flag state and kill-switch owner</li>
+    <li>Rollback runbook (data + traffic + code)</li>
+    <li>Human go / no-go signature and date</li>
+  </ul>
+</section>
+
+<section id="prompts">
+  <h2>11. Prompt skeletons</h2>
+  <p>Hand off the <em>outcome</em> and constraints — not a line-by-line prescription. Always include how to prove done.</p>
+
+  <h3>Orchestrator</h3>
+  <div class="codeblock">
+    <button class="copy" data-target="p-orch">Copy</button>
+    <pre id="p-orch"><code>You are the orchestration agent for a strangler modernisation.
+You never edit production code. You only update RUNBOOK.md and spawn specialists.
+
+State machine: discover → plan_design → (human_gate) → test_gen → test_exec_baseline
+→ conversion → test_exec_dual → bugbot → security → validation → human_signoff.
+
+Rules:
+- Refuse to advance if a required artefact is missing or a human gate is open.
+- Spawn slice agents with non-overlapping path allowlists only.
+- Conflict/CI fix: one agent at a time.
+- After each specialist finishes, verify their artefact exists and update RUNBOOK.md phase.
+- Report blockers; do not invent verify commands.</code></pre>
+  </div>
+
+  <h3>Discovery (scout)</h3>
+  <div class="codeblock">
+    <button class="copy" data-target="p-scout">Copy</button>
+    <pre id="p-scout"><code>You are mapping [repo] for a strangler modernisation.
+Read-only except for adding docs/architecture/LEGACY_MAP.md.
+
+Deliver:
+1) Module/package map and runtime entrypoints / process tree
+2) Binaries, manifests, lockfiles, and the verify command(s)
+3) Data stores and external integrations / connectivity
+4) Existing test layout and CI workflow paths
+5) Top 5 risky hotspots for extraction (with file paths)
+6) Suggested vertical slices for parallel agents (non-overlapping paths)
+
+Do not change production code. Open a PR with only the doc.</code></pre>
+  </div>
+
+  <h3>Plan &amp; Design</h3>
+  <div class="codeblock">
+    <button class="copy" data-target="p-plan">Copy</button>
+    <pre id="p-plan"><code>Using LEGACY_MAP.md, draft PLAN.md and docs/adr/0001-north-star.md.
+
+Choose ONE north star: modular monolith | service extraction | platform upgrade.
+Include: slice sequence, path allowlists, data/cutover strategy, feature flags,
+rollback, acceptance criteria, and stop conditions.
+
+Use Plan Mode style: options with trade-offs, then a recommended path.
+Do not change production code. Mark status: awaiting_human_approval.</code></pre>
+  </div>
+
+  <h3>Characterisation / test generation</h3>
+  <div class="codeblock">
+    <button class="copy" data-target="p-tests">Copy</button>
+    <pre id="p-tests"><code>Add characterisation tests for [component] capturing current behaviour
+(including odd edge cases). Cover unit + relevant integration seams.
+Do not “fix” production bugs in this PR.
+Path allowlist: [tests/... and minimal harness only].
+Run [verify command] until green. PR = tests (+ minimal harness) only.
+List behaviours locked in the PR description.</code></pre>
+  </div>
+
+  <h3>Conversion (slice)</h3>
+  <div class="codeblock">
+    <button class="copy" data-target="p-slice">Copy</button>
+    <pre id="p-slice"><code>Goal: [e.g. extract Owners domain behind a clear package API]
+Branch: refactor/owners-boundary
+Path allowlist: [src/.../owner/**, tests/.../owner/**] ONLY.
+
+Constraints:
+- No behaviour change visible to users unless listed in "Intentional changes"
+- After every edit cycle run: [PROJECT VERIFY COMMAND]
+- Also run formatter/linter/typecheck as used in CI
+- Add/adjust unit tests for any moved logic
+- Keep the PR small; stop when CI is green and the boundary exists
+- Do not touch files outside the allowlist
+
+Definition of done:
+- Verify command green locally
+- CI green on the PR
+- Short PR description: before/after structure, test evidence, risks
+- Ready for /review-bugbot and /review-security</code></pre>
+  </div>
+
+  <h3>Dual-run test execution</h3>
+  <div class="codeblock">
+    <button class="copy" data-target="p-dual">Copy</button>
+    <pre id="p-dual"><code>Run the same test suite against legacy ref [LEGACY_SHA] and modern ref [MODERN_SHA]
+using identical command: [verify command].
+Store reports under evidence/reports/{legacy,modern}/.
+Compare results; fail RUNBOOK if any intentional-keep behaviour drifts.
+Do not change production code. Update evidence/reports/SUMMARY.md with SHAs and outcomes.</code></pre>
+  </div>
+
+  <h3>Validation</h3>
+  <div class="codeblock">
+    <button class="copy" data-target="p-val">Copy</button>
+    <pre id="p-val"><code>Produce evidence/EVIDENCE_PACK.md for human sign-off.
+Assemble: LEGACY_MAP, PLAN/ADR, test inventory, dual-run SUMMARY,
+CI check list, Bugbot findings, Security Reviewer + Vulnerability Scanner summaries,
+observability delta, flag/kill-switch owner, rollback runbook.
+Recommend go or no-go with residual risks. No production code changes.</code></pre>
+  </div>
+</section>
+
+<section id="anti">
+  <h2>12. Anti-patterns</h2>
+  <ul>
+    <li><strong>Big-bang rewrite agent</strong> — one agent, whole repo, multi-thousand-line PR.</li>
+    <li><strong>Overlapping path ownership</strong> — two agents editing the same package → merge hell.</li>
+    <li><strong>Skipping Plan / ADR</strong> — conversion before a human north star.</li>
+    <li><strong>Green locally, skip CI</strong> — Cloud Agent env drifted from CI image.</li>
+    <li><strong>Refactor while “also” changing product behaviour</strong> — impossible to review; split PRs.</li>
+    <li><strong>Deleting legacy before the strangler path is proven</strong> (or at least flagged + smoke-tested).</li>
+    <li><strong>Trusting the model’s claim that tests passed</strong> — require CI status checks.</li>
+    <li><strong>Using Bugbot or Security Agents instead of required checks</strong> — they sit beside CI.</li>
+    <li><strong>Autofix committing straight to the slice branch in a loop</strong> — prefer new-branch autofix.</li>
+    <li><strong>No dual-run</strong> — modern suite green while silently changing legacy behaviour.</li>
+    <li><strong>Coverage theatre</strong> — charting coverage up while change-failure rate is ignored.</li>
+  </ul>
+</section>
+
+<section id="dx">
+  <h2>13. Onboarding diagnostic</h2>
+  <p>Ask these in the first technical session. The answers predict time-to-value better than any architecture diagram.</p>
+  <ol class="dx">
+    <li>
+      <q>What does a developer run locally before they push?</q>
+      <p>If the answer is “nothing, CI catches it”, the agent has no way to check its own work — every mistake costs a full pipeline cycle.</p>
+    </li>
+    <li>
+      <q>Is there one command that runs the checks?</q>
+      <p><code>make check</code>, <code>npm run verify</code>, a documented task. If verification is six undocumented CI steps, consolidate that first — a fast, high-value win.</p>
+    </li>
+    <li>
+      <q>How long does the test suite take?</q>
+      <p>Under two minutes is a healthy loop. Forty minutes means developers (and agents) batch changes. Split out a fast subset.</p>
+    </li>
+    <li>
+      <q>How many languages are in the main repository?</q>
+      <p>Polyglot monorepos mean several package managers, lockfiles, and test commands. Cross-language resolution is a common failure mode.</p>
+    </li>
+    <li>
+      <q>Can build machines reach the public registry?</q>
+      <p>Usually not. Find the internal proxy and approval path — it governs how quickly anything new can be introduced, including agent tooling.</p>
+    </li>
+  </ol>
+</section>
+
+<footer class="doc-foot">
+  <p>Internal SA engineering playbook · Chris Walker · Aug 2026 · Open in a browser · Print or “Save as PDF” for a handout.</p>
+  <p>Companion notes: <code>toolchain-reference.html</code> · <code>refactoring-with-cloud-agents.html</code> · <code>testing-in-an-agentic-world.html</code></p>
+  <p>Cursor docs:
+    <a href="https://cursor.com/docs/agent/plan-mode">Plan Mode</a> ·
+    <a href="https://cursor.com/docs/cloud-agent">Cloud Agents</a> ·
+    <a href="https://cursor.com/docs/bugbot">Bugbot</a> ·
+    <a href="https://cursor.com/docs/security-agents">Security Agents</a> ·
+    <a href="https://cursor.com/docs/cloud-agent/automations">Automations</a> ·
+    <a href="https://cursor.com/docs/mcp">MCP</a> ·
+    <a href="https://docs.github.com/en/pull-requests/reference/status-checks">GitHub status checks</a>
+  </p>
+  <p>One-line summary: Refactor with many Cloud Agents the way you’d staff many engineers — shared north star, non-overlapping slices, characterisation before cuts, Plan and Design before conversion, Bugbot and Security beside CI, and no merge without the burden of proof.</p>
+</footer>
+
+</div>
+
+<script>
+document.querySelectorAll('.copy').forEach(btn => {
+  btn.addEventListener('click', async () => {
+    const el = document.getElementById(btn.dataset.target);
+    const text = el ? el.innerText : '';
+    try {
+      await navigator.clipboard.writeText(text);
+    } catch {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      ta.remove();
+    }
+    btn.textContent = 'Copied';
+    btn.dataset.done = '1';
+    setTimeout(() => { btn.textContent = 'Copy'; btn.dataset.done = '0'; }, 1600);
+  });
+});
+</script>
+</body>
+</html>
