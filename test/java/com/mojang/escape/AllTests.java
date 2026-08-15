@@ -15,7 +15,7 @@ public final class AllTests {
 	private static final Class<?>[] TEST_CLASSES = {
 			com.mojang.escape.SmokeTest.class,
 			com.mojang.escape.movement.MovementCharacterisationTest.class,
-			com.mojang.escape.level.LevelLoadCharacterisationTest.class,
+			com.mojang.escape.world.LevelLoadCharacterisationTest.class,
 			com.mojang.escape.present.PresenterTest.class,
 			com.mojang.escape.look.MouseLookTest.class,
 			com.mojang.escape.light.TorchLightTest.class,

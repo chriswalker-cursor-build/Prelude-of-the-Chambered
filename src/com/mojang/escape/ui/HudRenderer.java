@@ -7,11 +7,11 @@ import java.awt.image.BufferedImage;
 import java.util.EnumMap;
 import java.util.Map;
 
-import com.mojang.escape.Art;
-import com.mojang.escape.Game;
+import com.mojang.escape.render.Art;
+import com.mojang.escape.session.Game;
 import com.mojang.escape.IntegerScaler;
-import com.mojang.escape.entities.Item;
-import com.mojang.escape.entities.Player;
+import com.mojang.escape.sim.Item;
+import com.mojang.escape.sim.Player;
 
 /**
  * V4 hotbar/health HUD (ADR 0002). Composited after the integer blit at

@@ -1,7 +1,7 @@
 package com.mojang.escape.look;
 
 import com.mojang.escape.EscapeSettings;
-import com.mojang.escape.MouseLook;
+import com.mojang.escape.input.MouseLook;
 import com.mojang.escape.support.Check;
 
 /** V2: lerp mouse-look maths and flag defaults. Keyboard look stays locked by S1. */

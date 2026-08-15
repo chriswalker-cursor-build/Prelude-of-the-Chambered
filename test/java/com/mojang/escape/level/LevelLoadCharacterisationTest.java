@@ -1,25 +1,25 @@
-package com.mojang.escape.level;
+package com.mojang.escape.world;
 
-import com.mojang.escape.Game;
-import com.mojang.escape.level.block.AltarBlock;
-import com.mojang.escape.level.block.BarsBlock;
-import com.mojang.escape.level.block.Block;
-import com.mojang.escape.level.block.ChestBlock;
-import com.mojang.escape.level.block.DoorBlock;
-import com.mojang.escape.level.block.FinalUnlockBlock;
-import com.mojang.escape.level.block.IceBlock;
-import com.mojang.escape.level.block.LadderBlock;
-import com.mojang.escape.level.block.LockedDoorBlock;
-import com.mojang.escape.level.block.LootBlock;
-import com.mojang.escape.level.block.PitBlock;
-import com.mojang.escape.level.block.PressurePlateBlock;
-import com.mojang.escape.level.block.SolidBlock;
-import com.mojang.escape.level.block.SpiritWallBlock;
-import com.mojang.escape.level.block.SwitchBlock;
-import com.mojang.escape.level.block.TorchBlock;
-import com.mojang.escape.level.block.VanishBlock;
-import com.mojang.escape.level.block.WaterBlock;
-import com.mojang.escape.level.block.WinBlock;
+import com.mojang.escape.session.Game;
+import com.mojang.escape.world.block.AltarBlock;
+import com.mojang.escape.world.block.BarsBlock;
+import com.mojang.escape.world.block.Block;
+import com.mojang.escape.world.block.ChestBlock;
+import com.mojang.escape.world.block.DoorBlock;
+import com.mojang.escape.world.block.FinalUnlockBlock;
+import com.mojang.escape.world.block.IceBlock;
+import com.mojang.escape.world.block.LadderBlock;
+import com.mojang.escape.world.block.LockedDoorBlock;
+import com.mojang.escape.world.block.LootBlock;
+import com.mojang.escape.world.block.PitBlock;
+import com.mojang.escape.world.block.PressurePlateBlock;
+import com.mojang.escape.world.block.SolidBlock;
+import com.mojang.escape.world.block.SpiritWallBlock;
+import com.mojang.escape.world.block.SwitchBlock;
+import com.mojang.escape.world.block.TorchBlock;
+import com.mojang.escape.world.block.VanishBlock;
+import com.mojang.escape.world.block.WaterBlock;
+import com.mojang.escape.world.block.WinBlock;
 import com.mojang.escape.support.Check;
 import com.mojang.escape.support.Worlds;
 
@@ -113,7 +113,7 @@ public final class LevelLoadCharacterisationTest {
 		// alpha 0xFE → id = 255 - 254 = 1
 		pixels[1 + 1 * w] = 0xFE000000 | Worlds.PLAIN;
 		Game game = new Game();
-		game.player = new com.mojang.escape.entities.Player();
+		game.player = new com.mojang.escape.sim.Player();
 		Worlds.SyntheticLevel level = new Worlds.SyntheticLevel();
 		level.init(game, "synthetic", w, h, pixels);
 		Check.equal(1, level.getBlock(1, 1).id, "id from alpha channel");

@@ -1,8 +1,8 @@
 package com.mojang.escape.support;
 
-import com.mojang.escape.Game;
-import com.mojang.escape.entities.Player;
-import com.mojang.escape.level.Level;
+import com.mojang.escape.session.Game;
+import com.mojang.escape.sim.Player;
+import com.mojang.escape.world.Level;
 
 /**
  * Synthetic-level harness. Builds a bordered map from raw colour values so

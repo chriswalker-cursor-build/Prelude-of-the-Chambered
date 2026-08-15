@@ -3,7 +3,7 @@
 
   <!-- Project-specific configuration -->
   <property name="package" value="com.mojang.escape"/>
-  <property name="main.class" value="${package}.EscapeComponent"/>
+  <property name="main.class" value="${package}.app.EscapeComponent"/>
   <property name="jar.file" value="${ant.project.name}.jar"/>
 
   <property name="src.dir" value="src"/>

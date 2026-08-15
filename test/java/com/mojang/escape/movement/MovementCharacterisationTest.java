@@ -1,12 +1,12 @@
 package com.mojang.escape.movement;
 
-import com.mojang.escape.Game;
-import com.mojang.escape.entities.Item;
-import com.mojang.escape.entities.Player;
-import com.mojang.escape.level.Level;
-import com.mojang.escape.level.block.Block;
-import com.mojang.escape.level.block.WaterBlock;
-import com.mojang.escape.menu.LoseMenu;
+import com.mojang.escape.session.Game;
+import com.mojang.escape.sim.Item;
+import com.mojang.escape.sim.Player;
+import com.mojang.escape.world.Level;
+import com.mojang.escape.world.block.Block;
+import com.mojang.escape.world.block.WaterBlock;
+import com.mojang.escape.ui.LoseMenu;
 import com.mojang.escape.support.Check;
 import com.mojang.escape.support.Worlds;
 

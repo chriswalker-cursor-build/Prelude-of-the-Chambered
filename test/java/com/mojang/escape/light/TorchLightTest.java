@@ -1,10 +1,10 @@
 package com.mojang.escape.light;
 
 import com.mojang.escape.EscapeSettings;
-import com.mojang.escape.Game;
-import com.mojang.escape.entities.Player;
-import com.mojang.escape.gui.Bitmap3D;
-import com.mojang.escape.gui.TorchLight;
+import com.mojang.escape.session.Game;
+import com.mojang.escape.sim.Player;
+import com.mojang.escape.render.Bitmap3D;
+import com.mojang.escape.render.TorchLight;
 import com.mojang.escape.support.Check;
 import com.mojang.escape.support.Worlds;
 

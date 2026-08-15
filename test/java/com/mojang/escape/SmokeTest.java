@@ -1,6 +1,7 @@
 package com.mojang.escape;
 
-import com.mojang.escape.entities.Item;
+import com.mojang.escape.render.Art;
+import com.mojang.escape.sim.Item;
 import com.mojang.escape.support.Check;
 
 /** Proves the harness, classpath, and resources work before real characterisation lands. */

@@ -4,10 +4,10 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
 import com.mojang.escape.EscapeSettings;
-import com.mojang.escape.Game;
+import com.mojang.escape.session.Game;
 import com.mojang.escape.IntegerScaler;
-import com.mojang.escape.entities.Item;
-import com.mojang.escape.gui.Screen;
+import com.mojang.escape.sim.Item;
+import com.mojang.escape.render.Screen;
 import com.mojang.escape.support.Check;
 import com.mojang.escape.ui.HudLayout;
 import com.mojang.escape.ui.HudRenderer;
