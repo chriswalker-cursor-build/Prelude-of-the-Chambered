@@ -19,7 +19,7 @@ public final class DevSpawnTest {
 		System.setProperty("escape.dev.spawnLevel", "dungeon");
 		try {
 			Game game = new Game();
-			game.newGame();
+			Check.isTrue(game.menu == null, "dev boot skips the title menu");
 			Check.equal("The Dungeons", game.level.name, "dev spawn level");
 			Check.instanceOf(LadderBlock.class,
 					game.level.getBlock(game.level.xSpawn, game.level.ySpawn), "spawns at the id-1 ladder");

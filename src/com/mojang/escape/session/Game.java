@@ -15,7 +15,12 @@ public class Game {
 	public Menu menu;
 
 	public Game() {
-		setMenu(new TitleMenu());
+		if (com.mojang.escape.EscapeSettings.devSpawnLevel() == null) {
+			setMenu(new TitleMenu());
+		} else {
+			// Dev/demo boot: skip the title menu and start directly in the level.
+			newGame();
+		}
 	}
 
 	public void newGame() {
