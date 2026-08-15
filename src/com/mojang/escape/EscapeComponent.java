@@ -25,12 +25,16 @@ public class EscapeComponent extends Canvas implements Runnable {
 	private Cursor emptyCursor, defaultCursor;
 	private boolean hadFocus = false;
 
+	private final EscapeSettings.PresentMode presentMode = EscapeSettings.presentMode();
+
 	public EscapeComponent() {
 		Dimension size = new Dimension(WIDTH * SCALE, HEIGHT * SCALE);
 		setSize(size);
 		setPreferredSize(size);
-		setMinimumSize(size);
-		setMaximumSize(size);
+		if (presentMode == EscapeSettings.PresentMode.FIXED4) {
+			setMinimumSize(size);
+			setMaximumSize(size);
+		}
 
 		game = new Game();
 		screen = new Screen(WIDTH, HEIGHT);
@@ -136,8 +140,15 @@ public class EscapeComponent extends Canvas implements Runnable {
 		}
 
 		Graphics g = bs.getDrawGraphics();
-		g.fillRect(0, 0, getWidth(), getHeight());
-		g.drawImage(img, 0, 0, WIDTH * SCALE, HEIGHT * SCALE, null);
+		if (presentMode == EscapeSettings.PresentMode.INTEGER_FILL) {
+			g.setColor(Color.BLACK);
+			g.fillRect(0, 0, getWidth(), getHeight());
+			IntegerScaler.Placement p = IntegerScaler.fit(WIDTH, HEIGHT, getWidth(), getHeight());
+			g.drawImage(img, p.x(), p.y(), p.w(), p.h(), null);
+		} else {
+			g.fillRect(0, 0, getWidth(), getHeight());
+			g.drawImage(img, 0, 0, WIDTH * SCALE, HEIGHT * SCALE, null);
+		}
 		g.dispose();
 		bs.show();
 	}
@@ -153,7 +164,7 @@ public class EscapeComponent extends Canvas implements Runnable {
 		frame.setContentPane(panel);
 		frame.pack();
 		frame.setLocationRelativeTo(null);
-		frame.setResizable(false);
+		frame.setResizable(EscapeSettings.presentMode() == EscapeSettings.PresentMode.INTEGER_FILL);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
 
