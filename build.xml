@@ -24,7 +24,7 @@
 	  description="Compile all source files.">
     <javac srcdir="${src.dir}" destdir="${build.dir}"
 	   optimize="on" debug="on" deprecation="on"
-	   includeantruntime="false">
+	   includeantruntime="false" release="21">
       <compilerarg value="-Xlint"/>
     </javac>
     <copy todir="${build.dir}">

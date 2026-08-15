@@ -181,7 +181,7 @@ public abstract class Level {
 	private static Level byName(String name) {
 		try {
 			name = name.substring(0, 1).toUpperCase() + name.substring(1);
-			return (Level) Class.forName("com.mojang.escape.level." + name + "Level").newInstance();
+			return (Level) Class.forName("com.mojang.escape.level." + name + "Level").getDeclaredConstructor().newInstance();
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
