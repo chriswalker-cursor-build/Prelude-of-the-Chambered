@@ -48,4 +48,13 @@ public final class EscapeSettings {
 				? HudMode.HOTBAR
 				: HudMode.LEGACY_PANEL;
 	}
+
+	/**
+	 * Dev/test utility: start a new game directly in the named level (spawning
+	 * at its id-1 ladder) instead of the prison. Unset in normal play; used by
+	 * demo recordings and manual testing of deeper levels.
+	 */
+	public static String devSpawnLevel() {
+		return System.getProperty("escape.dev.spawnLevel");
+	}
 }

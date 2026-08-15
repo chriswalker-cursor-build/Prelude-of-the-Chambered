@@ -20,7 +20,11 @@ public class Game {
 
 	public void newGame() {
 		Level.clear();
-		level = Level.loadLevel(this, "start");
+		String devLevel = com.mojang.escape.EscapeSettings.devSpawnLevel();
+		level = Level.loadLevel(this, devLevel == null ? "start" : devLevel);
+		if (devLevel != null) {
+			level.findSpawn(1);
+		}
 
 		player = new Player();
 		player.level = level;

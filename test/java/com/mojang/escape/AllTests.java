@@ -20,6 +20,7 @@ public final class AllTests {
 			com.mojang.escape.look.MouseLookTest.class,
 			com.mojang.escape.light.TorchLightTest.class,
 			com.mojang.escape.hud.HudTest.class,
+			com.mojang.escape.dev.DevSpawnTest.class,
 	};
 
 	public static void main(String[] args) {
