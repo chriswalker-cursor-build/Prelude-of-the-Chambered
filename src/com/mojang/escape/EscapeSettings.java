@@ -38,4 +38,14 @@ public final class EscapeSettings {
 				? LightMode.TORCH_RADIUS
 				: LightMode.DEPTH_FOG;
 	}
+
+	public enum HudMode {
+		LEGACY_PANEL, HOTBAR
+	}
+
+	public static HudMode hudMode() {
+		return "hotbar".equals(System.getProperty("escape.hud.mode"))
+				? HudMode.HOTBAR
+				: HudMode.LEGACY_PANEL;
+	}
 }

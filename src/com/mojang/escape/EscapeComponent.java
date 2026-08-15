@@ -6,6 +6,7 @@ import java.awt.image.*;
 import javax.swing.*;
 
 import com.mojang.escape.gui.Screen;
+import com.mojang.escape.ui.HudRenderer;
 
 public class EscapeComponent extends Canvas implements Runnable, InputHandler.MouseMotionSink {
 	private static final long serialVersionUID = 1L;
@@ -28,6 +29,7 @@ public class EscapeComponent extends Canvas implements Runnable, InputHandler.Mo
 	private final EscapeSettings.PresentMode presentMode = EscapeSettings.presentMode();
 	private MouseLook mouseLook;
 	private Robot robot;
+	private HudRenderer hudRenderer;
 
 	public EscapeComponent() {
 		Dimension size = new Dimension(WIDTH * SCALE, HEIGHT * SCALE);
@@ -170,14 +172,21 @@ public class EscapeComponent extends Canvas implements Runnable, InputHandler.Mo
 		}
 
 		Graphics g = bs.getDrawGraphics();
+		IntegerScaler.Placement p;
 		if (presentMode == EscapeSettings.PresentMode.INTEGER_FILL) {
 			g.setColor(Color.BLACK);
 			g.fillRect(0, 0, getWidth(), getHeight());
-			IntegerScaler.Placement p = IntegerScaler.fit(WIDTH, HEIGHT, getWidth(), getHeight());
+			p = IntegerScaler.fit(WIDTH, HEIGHT, getWidth(), getHeight());
 			g.drawImage(img, p.x(), p.y(), p.w(), p.h(), null);
 		} else {
 			g.fillRect(0, 0, getWidth(), getHeight());
+			p = new IntegerScaler.Placement(SCALE, 0, 0, WIDTH * SCALE, HEIGHT * SCALE);
 			g.drawImage(img, 0, 0, WIDTH * SCALE, HEIGHT * SCALE, null);
+		}
+		if (EscapeSettings.hudMode() == EscapeSettings.HudMode.HOTBAR
+				&& game.level != null && game.menu == null && game.pauseTime == 0) {
+			if (hudRenderer == null) hudRenderer = new HudRenderer();
+			hudRenderer.render(g, game, p);
 		}
 		g.dispose();
 		bs.show();

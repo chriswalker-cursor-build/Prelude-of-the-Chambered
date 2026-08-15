@@ -76,33 +76,39 @@ public class Screen extends Bitmap {
 				}
 			}
 
-			draw(Art.panel, 0, height - PANEL_HEIGHT, 0, 0, width, PANEL_HEIGHT, Art.getCol(0x707070));
+			if (com.mojang.escape.EscapeSettings.hudMode() == com.mojang.escape.EscapeSettings.HudMode.HOTBAR) {
+				// V4: the panel strip is blanked here and redrawn at window
+				// resolution by HudRenderer after the integer blit.
+				fill(0, height - PANEL_HEIGHT, width, height, 0);
+			} else {
+				draw(Art.panel, 0, height - PANEL_HEIGHT, 0, 0, width, PANEL_HEIGHT, Art.getCol(0x707070));
 
-			draw("å", 3, height - 26 + 0, 0x00ffff);
-			draw("" + game.player.keys + "/4", 10, height - 26 + 0, 0xffffff);
-			draw("Ä", 3, height - 26 + 8, 0xffff00);
-			draw("" + game.player.loot, 10, height - 26 + 8, 0xffffff);
-			draw("Å", 3, height - 26 + 16, 0xff0000);
-			draw("" + game.player.health, 10, height - 26 + 16, 0xffffff);
+				draw("å", 3, height - 26 + 0, 0x00ffff);
+				draw("" + game.player.keys + "/4", 10, height - 26 + 0, 0xffffff);
+				draw("Ä", 3, height - 26 + 8, 0xffff00);
+				draw("" + game.player.loot, 10, height - 26 + 8, 0xffffff);
+				draw("Å", 3, height - 26 + 16, 0xff0000);
+				draw("" + game.player.health, 10, height - 26 + 16, 0xffffff);
 
-			for (int i = 0; i < 8; i++) {
-				Item slotItem = game.player.items[i];
-				if (slotItem != Item.none) {
-					draw(Art.items, 30 + i * 16, height - PANEL_HEIGHT + 2, slotItem.icon * 16, 0, 16, 16, Art.getCol(slotItem.color));
-					if (slotItem == Item.pistol) {
-						String str = "" + game.player.ammo;
-						draw(str, 30 + i * 16 + 17 - str.length() * 6, height - PANEL_HEIGHT + 1 + 10, 0x555555);
-					}
-					if (slotItem == Item.potion) {
-						String str = "" + game.player.potions;
-						draw(str, 30 + i * 16 + 17 - str.length() * 6, height - PANEL_HEIGHT + 1 + 10, 0x555555);
+				for (int i = 0; i < 8; i++) {
+					Item slotItem = game.player.items[i];
+					if (slotItem != Item.none) {
+						draw(Art.items, 30 + i * 16, height - PANEL_HEIGHT + 2, slotItem.icon * 16, 0, 16, 16, Art.getCol(slotItem.color));
+						if (slotItem == Item.pistol) {
+							String str = "" + game.player.ammo;
+							draw(str, 30 + i * 16 + 17 - str.length() * 6, height - PANEL_HEIGHT + 1 + 10, 0x555555);
+						}
+						if (slotItem == Item.potion) {
+							String str = "" + game.player.potions;
+							draw(str, 30 + i * 16 + 17 - str.length() * 6, height - PANEL_HEIGHT + 1 + 10, 0x555555);
+						}
 					}
 				}
+
+				draw(Art.items, 30 + game.player.selectedSlot * 16, height - PANEL_HEIGHT + 2, 0, 48, 17, 17, Art.getCol(0xffffff));
+
+				draw(item.name, 26 + (8 * 16 - item.name.length() * 4) / 2, height - 9, 0xffffff);
 			}
-
-			draw(Art.items, 30 + game.player.selectedSlot * 16, height - PANEL_HEIGHT + 2, 0, 48, 17, 17, Art.getCol(0xffffff));
-
-			draw(item.name, 26 + (8 * 16 - item.name.length() * 4) / 2, height - 9, 0xffffff);
 		}
 
 		if (game.menu != null) {
