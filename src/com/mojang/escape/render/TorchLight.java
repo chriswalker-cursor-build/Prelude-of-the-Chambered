@@ -11,9 +11,9 @@ import com.mojang.escape.render.Sprite;
  * dominates. This never darkens a pixel — it only adds to fog brightness.
  */
 public final class TorchLight {
-	public static final double RADIUS = 3.5;
+	public static final double RADIUS = 2.75;
 	/** Brightness units (0-255 scale) added at the torch itself. */
-	public static final double STRENGTH = 220;
+	public static final double STRENGTH = 320;
 
 	private double[] xs = new double[16];
 	private double[] zs = new double[16];
@@ -46,7 +46,11 @@ public final class TorchLight {
 		return count;
 	}
 
-	/** Additional brightness (0-255 scale, unclamped) at a world position. */
+	/**
+	 * Additional brightness (0-255 scale, unclamped) at a world position.
+	 * (1 - d/R)^2 concentrates light at the torch so dense torch clusters
+	 * (e.g. the prison spawn) still read as pools, not a global lift.
+	 */
 	public double lightAt(double worldX, double worldZ) {
 		double r2 = RADIUS * RADIUS;
 		double sum = 0;
@@ -55,7 +59,8 @@ public final class TorchLight {
 			double dz = worldZ - zs[i];
 			double d2 = dx * dx + dz * dz;
 			if (d2 < r2) {
-				sum += (1 - d2 / r2) * STRENGTH;
+				double t = 1 - Math.sqrt(d2) / RADIUS;
+				sum += t * t * STRENGTH;
 			}
 		}
 		return sum;
