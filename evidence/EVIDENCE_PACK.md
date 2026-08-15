@@ -27,6 +27,8 @@ Train: `cursor/modernisation-train-3359` (one slice per commit). Recommendation 
 | `0dfabc9` | V3 torch radius (`escape.light.mode`) | behaviour, flagged | 39 |
 | `d06ef97` | V4 hotbar/health HUD (`escape.hud.mode`) | behaviour, flagged | 44 |
 | `8b9f003` | S4 package boundaries (app/input/session/world/sim/render/ui/audio) | moves only | 44 |
+| `8ec92e4` | V3 tuning: falloff `(1-d/R)^2`, radius 2.75, strength 320 (video review + headless A/B showed the first model read as a flat lift, not pools) | behaviour, flagged | 44 |
+| `cc5cfda`+`2120b66`+`292e120` | `escape.dev.spawnLevel` dev/test utility (boot straight into a named level at its id-1 ladder, `wait` suppressed) — used by recordings; default unchanged | dev utility, flagged | 46 |
 
 Gate compliance: `render/Screen.java` (née `gui/Screen.java`) was first edited in V4, after S1 (`f8c8292`) and S2 (`098ffd9`) existed — the hard gate from the accepted plan.
 
@@ -65,7 +67,8 @@ See `evidence/reports/SUMMARY.md`: baseline 23/23 and modern 44/44 with **zero d
 
 - Golden doubles use 1e-6 epsilons for trig accumulation; exotic JVMs could still differ — CI on Temurin 21 is the reference.
 - V2 relies on `java.awt.Robot` for pointer re-centering; without it (rare), mouse-look degrades at window edges but keyboard is unaffected.
-- Torch STRENGTH/RADIUS (220 / 3.5 tiles) are tuning constants; a human may want to taste-test before flipping `escape.light.mode` default.
+- Torch STRENGTH/RADIUS (320 / 2.75 tiles, `(1-d/R)^2`) are tuning constants validated on recordings; a human may still taste-test before flipping the `escape.light.mode` default.
+- The prison spawn area is ringed by torches, so pools there read subtler than in the temple/dungeon; the recordings use `escape.dev.spawnLevel=temple` for the clearest before/after.
 
 ## 9. Recommendation
 

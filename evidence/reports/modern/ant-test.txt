@@ -38,9 +38,9 @@ compile:
     [javac] /workspace/src/com/mojang/escape/app/EscapeComponent.java:41: warning: [this-escape] possible 'this' escape before subclass is fully initialized
     [javac] 		setSize(size);
     [javac] 		       ^
-    [javac] /workspace/src/com/mojang/escape/session/Game.java:18: warning: [this-escape] possible 'this' escape before subclass is fully initialized
-    [javac] 		setMenu(new TitleMenu());
-    [javac] 		       ^
+    [javac] /workspace/src/com/mojang/escape/session/Game.java:19: warning: [this-escape] possible 'this' escape before subclass is fully initialized
+    [javac] 			setMenu(new TitleMenu());
+    [javac] 			       ^
     [javac] /workspace/src/com/mojang/escape/world/block/AltarBlock.java:17: warning: [this-escape] possible 'this' escape before subclass is fully initialized
     [javac] 		addSprite(sprite);
     [javac] 		         ^
@@ -64,7 +64,7 @@ compile:
 
 compile-tests:
     [mkdir] Created dir: /workspace/build-test
-    [javac] Compiling 10 source files to /workspace/build-test
+    [javac] Compiling 11 source files to /workspace/build-test
 
 test:
      [java] PASS SmokeTest.testArtResourcesLoadHeadless
@@ -132,7 +132,9 @@ test:
      [java] PASS HudTest.testHudRendersHealthAndSelectionHeadless
      [java] PASS HudTest.testLayoutSitsOverThePanelStripAtAnyScale
      [java] PASS HudTest.testLegacyPanelIsBlankedInHotbarMode
-     [java] 44 passed, 0 failed
+     [java] PASS DevSpawnTest.testDefaultNewGameStillStartsInThePrison
+     [java] PASS DevSpawnTest.testDevSpawnStartsInNamedLevelAtLadder
+     [java] 46 passed, 0 failed
 
 BUILD SUCCESSFUL
 Total time: 1 second

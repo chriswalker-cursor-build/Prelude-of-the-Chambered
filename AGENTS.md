@@ -25,7 +25,7 @@ Zero-dependency on purpose — Maven Central is not reachable from the Cloud Age
 
 1. Do not rewrite in another language, framework, or renderer. North star is ADR 0001.
 2. Characterisation locks behaviour. Never "fix" 2011 quirks (ice axis-lock, friction, spawn rot `π + 0.4`) in a test or structural PR.
-3. Play-feel changes ship behind system-property flags with 2011 defaults (`escape.present.mode`, `escape.look.mode`, `escape.light.mode`, `escape.hud.mode`). Do not flip defaults.
+3. Play-feel changes ship behind system-property flags with 2011 defaults (`escape.present.mode`, `escape.look.mode`, `escape.light.mode`, `escape.hud.mode`). Do not flip defaults. `escape.dev.spawnLevel=<name>` is a dev/test utility that boots straight into a named level for demos and manual testing.
 4. Split behaviour from structure — a package move and a gameplay change never share a commit.
 5. No drive-by reformatting of Notch's code. Match surrounding style (tabs, brace placement).
 6. Respect the path allowlists in `RUNBOOK.md` for whichever slice you are executing.
