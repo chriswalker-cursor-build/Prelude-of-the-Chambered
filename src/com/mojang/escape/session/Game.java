@@ -24,6 +24,11 @@ public class Game {
 		level = Level.loadLevel(this, devLevel == null ? "start" : devLevel);
 		if (devLevel != null) {
 			level.findSpawn(1);
+			// Same suppression as switchLevel: standing on the arrival ladder
+			// must not immediately trigger a level switch.
+			if (level.getBlock(level.xSpawn, level.ySpawn) instanceof LadderBlock ladder) {
+				ladder.wait = true;
+			}
 		}
 
 		player = new Player();
