@@ -1,0 +1,138 @@
+Buildfile: /workspace/build.xml
+
+clean:
+   [delete] Deleting directory /workspace/build
+   [delete] Deleting directory /workspace/dist
+   [delete] Deleting directory /workspace/build-test
+
+init:
+    [mkdir] Created dir: /workspace/build
+    [mkdir] Created dir: /workspace/dist
+
+compile:
+    [javac] Compiling 66 source files to /workspace/build
+    [javac] /workspace/src/com/mojang/escape/app/EscapeComponent.java:24: warning: [serial] non-transient instance field of a serializable class declared with a non-serializable type
+    [javac] 	private Thread thread;
+    [javac] 	               ^
+    [javac] /workspace/src/com/mojang/escape/app/EscapeComponent.java:26: warning: [serial] non-transient instance field of a serializable class declared with a non-serializable type
+    [javac] 	private Game game;
+    [javac] 	             ^
+    [javac] /workspace/src/com/mojang/escape/app/EscapeComponent.java:27: warning: [serial] non-transient instance field of a serializable class declared with a non-serializable type
+    [javac] 	private Screen screen;
+    [javac] 	               ^
+    [javac] /workspace/src/com/mojang/escape/app/EscapeComponent.java:28: warning: [serial] non-transient instance field of a serializable class declared with a non-serializable type
+    [javac] 	private BufferedImage img;
+    [javac] 	                      ^
+    [javac] /workspace/src/com/mojang/escape/app/EscapeComponent.java:30: warning: [serial] non-transient instance field of a serializable class declared with a non-serializable type
+    [javac] 	private InputHandler inputHandler;
+    [javac] 	                     ^
+    [javac] /workspace/src/com/mojang/escape/app/EscapeComponent.java:35: warning: [serial] non-transient instance field of a serializable class declared with a non-serializable type
+    [javac] 	private MouseLook mouseLook;
+    [javac] 	                  ^
+    [javac] /workspace/src/com/mojang/escape/app/EscapeComponent.java:36: warning: [serial] non-transient instance field of a serializable class declared with a non-serializable type
+    [javac] 	private Robot robot;
+    [javac] 	              ^
+    [javac] /workspace/src/com/mojang/escape/app/EscapeComponent.java:37: warning: [serial] non-transient instance field of a serializable class declared with a non-serializable type
+    [javac] 	private HudRenderer hudRenderer;
+    [javac] 	                    ^
+    [javac] /workspace/src/com/mojang/escape/app/EscapeComponent.java:41: warning: [this-escape] possible 'this' escape before subclass is fully initialized
+    [javac] 		setSize(size);
+    [javac] 		       ^
+    [javac] /workspace/src/com/mojang/escape/session/Game.java:18: warning: [this-escape] possible 'this' escape before subclass is fully initialized
+    [javac] 		setMenu(new TitleMenu());
+    [javac] 		       ^
+    [javac] /workspace/src/com/mojang/escape/world/block/AltarBlock.java:17: warning: [this-escape] possible 'this' escape before subclass is fully initialized
+    [javac] 		addSprite(sprite);
+    [javac] 		         ^
+    [javac] /workspace/src/com/mojang/escape/world/block/BarsBlock.java:15: warning: [this-escape] possible 'this' escape before subclass is fully initialized
+    [javac] 		addSprite(sprite);
+    [javac] 		         ^
+    [javac] /workspace/src/com/mojang/escape/world/block/ChestBlock.java:20: warning: [this-escape] possible 'this' escape before subclass is fully initialized
+    [javac] 		addSprite(chestSprite);
+    [javac] 		         ^
+    [javac] /workspace/src/com/mojang/escape/world/block/LadderBlock.java:17: warning: [this-escape] possible 'this' escape before subclass is fully initialized
+    [javac] 			addSprite(new Sprite(0, 0, 0, 8 + 3, Art.getCol(LADDER_COLOR)));
+    [javac] 			         ^
+    [javac] /workspace/src/com/mojang/escape/world/block/LootBlock.java:16: warning: [this-escape] possible 'this' escape before subclass is fully initialized
+    [javac] 		addSprite(sprite);
+    [javac] 		         ^
+    [javac] /workspace/src/com/mojang/escape/world/block/SpiritWallBlock.java:16: warning: [this-escape] possible 'this' escape before subclass is fully initialized
+    [javac] 			addSprite(new Sprite(x, y, z, 4 * 8 + 6 + random.nextInt(2), Art.getCol(0x202020)));
+    [javac] 			         ^
+    [javac] 16 warnings
+     [copy] Copying 35 files to /workspace/build
+
+compile-tests:
+    [mkdir] Created dir: /workspace/build-test
+    [javac] Compiling 10 source files to /workspace/build-test
+
+test:
+     [java] PASS SmokeTest.testArtResourcesLoadHeadless
+     [java] PASS SmokeTest.testItemEnumIsStable
+     [java] PASS MovementCharacterisationTest.testCollisionNeverEntersSolidBlocks
+     [java] PASS MovementCharacterisationTest.testDeadPlayerIgnoresInputThenLoses
+     [java] java.lang.IllegalArgumentException: No line matching interface Clip supporting format PCM_SIGNED unknown sample rate, 16 bit, stereo, 4 bytes/frame, big-endian is supported.
+     [java] java.lang.IllegalArgumentException: No line matching interface Clip supporting format PCM_SIGNED unknown sample rate, 16 bit, stereo, 4 bytes/frame, big-endian is supported.
+     [java] java.lang.IllegalArgumentException: No line matching interface Clip supporting format PCM_SIGNED unknown sample rate, 16 bit, stereo, 4 bytes/frame, big-endian is supported.
+     [java] java.lang.IllegalArgumentException: No line matching interface Clip supporting format PCM_SIGNED unknown sample rate, 16 bit, stereo, 4 bytes/frame, big-endian is supported.
+     [java] java.lang.IllegalArgumentException: No line matching interface Clip supporting format PCM_SIGNED unknown sample rate, 16 bit, stereo, 4 bytes/frame, big-endian is supported.
+     [java] java.lang.IllegalArgumentException: No line matching interface Clip supporting format PCM_SIGNED unknown sample rate, 16 bit, stereo, 4 bytes/frame, big-endian is supported.
+     [java] java.lang.IllegalArgumentException: No line matching interface Clip supporting format PCM_SIGNED unknown sample rate, 16 bit, stereo, 4 bytes/frame, big-endian is supported.
+     [java] java.lang.IllegalArgumentException: No line matching interface Clip supporting format PCM_SIGNED unknown sample rate, 16 bit, stereo, 4 bytes/frame, big-endian is supported.
+     [java] java.lang.IllegalArgumentException: No line matching interface Clip supporting format PCM_SIGNED unknown sample rate, 16 bit, stereo, 4 bytes/frame, big-endian is supported.
+     [java] java.lang.IllegalArgumentException: No line matching interface Clip supporting format PCM_SIGNED unknown sample rate, 16 bit, stereo, 4 bytes/frame, big-endian is supported.
+     [java] java.lang.IllegalArgumentException: No line matching interface Clip supporting format PCM_SIGNED unknown sample rate, 16 bit, stereo, 4 bytes/frame, big-endian is supported.
+     [java] java.lang.IllegalArgumentException: No line matching interface Clip supporting format PCM_SIGNED unknown sample rate, 16 bit, stereo, 4 bytes/frame, big-endian is supported.
+     [java] java.lang.IllegalArgumentException: No line matching interface Clip supporting format PCM_SIGNED unknown sample rate, 16 bit, stereo, 4 bytes/frame, big-endian is supported.
+     [java] java.lang.IllegalArgumentException: No line matching interface Clip supporting format PCM_SIGNED unknown sample rate, 16 bit, stereo, 4 bytes/frame, big-endian is supported.
+     [java] java.lang.IllegalArgumentException: No line matching interface Clip supporting format PCM_SIGNED unknown sample rate, 16 bit, stereo, 4 bytes/frame, big-endian is supported.
+     [java] java.lang.IllegalArgumentException: No line matching interface Clip supporting format PCM_SIGNED unknown sample rate, 16 bit, stereo, 4 bytes/frame, big-endian is supported.
+     [java] java.lang.IllegalArgumentException: No line matching interface Clip supporting format PCM_SIGNED unknown sample rate, 16 bit, stereo, 4 bytes/frame, big-endian is supported.
+     [java] java.lang.IllegalArgumentException: No line matching interface Clip supporting format PCM_SIGNED unknown sample rate, 16 bit, stereo, 4 bytes/frame, big-endian is supported.
+     [java] java.lang.IllegalArgumentException: No line matching interface Clip supporting format PCM_SIGNED unknown sample rate, 16 bit, stereo, 4 bytes/frame, big-endian is supported.
+     [java] java.lang.IllegalArgumentException: No line matching interface Clip supporting format PCM_SIGNED unknown sample rate, 16 bit, stereo, 4 bytes/frame, big-endian is supported.
+     [java] java.lang.IllegalArgumentException: No line matching interface Clip supporting format PCM_SIGNED unknown sample rate, 16 bit, stereo, 4 bytes/frame, big-endian is supported.
+     [java] PASS MovementCharacterisationTest.testIceAxisLockWithoutSkates
+     [java] PASS MovementCharacterisationTest.testIceWithSkatesDoesNotSlide
+     [java] PASS MovementCharacterisationTest.testPlainFloorAccelerationAndFriction
+     [java] PASS MovementCharacterisationTest.testPlayerRadiusIsPointThree
+     [java] PASS MovementCharacterisationTest.testSpawnPositionAndRotation
+     [java] PASS MovementCharacterisationTest.testTurn60TicksGolden
+     [java] PASS MovementCharacterisationTest.testTurnLeftSingleTickAddsRotSpeed
+     [java] PASS MovementCharacterisationTest.testWalkForward60TicksGolden
+     [java] PASS MovementCharacterisationTest.testWalkIsDeterministicWithinJvm
+     [java] PASS MovementCharacterisationTest.testWaterRules
+     [java] PASS LevelLoadCharacterisationTest.testAllSixLevelsLoadWithNames
+     [java] PASS LevelLoadCharacterisationTest.testBlockIdDecodesFromAlpha
+     [java] PASS LevelLoadCharacterisationTest.testByNameReflectionConstructsSubclasses
+     [java] PASS LevelLoadCharacterisationTest.testCacheReturnsSameInstanceUntilCleared
+     [java] PASS LevelLoadCharacterisationTest.testColourToBlockFactoryTable
+     [java] PASS LevelLoadCharacterisationTest.testOutOfBoundsIsSolidWall
+     [java] PASS LevelLoadCharacterisationTest.testStartSpawnFromYellowPixel
+     [java] PASS LevelLoadCharacterisationTest.testSwitchArrivalSpawnsOnMatchingLadder
+     [java] PASS LevelLoadCharacterisationTest.testSwitchLevelGraphAndPause
+     [java] PASS PresenterTest.testDefaultModeIsLegacyFixed4
+     [java] PASS PresenterTest.testFlagEnablesIntegerFill
+     [java] PASS PresenterTest.testFullHdLetterboxesAtScaleNine
+     [java] PASS PresenterTest.testLegacyWindowIsExactlyScaleFour
+     [java] PASS PresenterTest.testNeverScalesBelowOne
+     [java] PASS PresenterTest.testOddCanvasCentersWithIntegerPixels
+     [java] PASS MouseLookTest.testDefaultModeIsKeyboard
+     [java] PASS MouseLookTest.testDeltasAccumulateWhilePending
+     [java] PASS MouseLookTest.testFlagEnablesMouseLerp
+     [java] PASS MouseLookTest.testFlickEasesOverSeveralTicksNotOne
+     [java] PASS MouseLookTest.testNoInputProducesNoRotation
+     [java] PASS MouseLookTest.testRightwardMouseTurnsRight
+     [java] PASS TorchLightTest.testDefaultModeIsDepthFog
+     [java] PASS TorchLightTest.testFalloffIsQuadraticAndBounded
+     [java] PASS TorchLightTest.testFlagEnablesTorchRadius
+     [java] PASS TorchLightTest.testTorchModeOnlyBrightensRenderedFrame
+     [java] PASS HudTest.testDefaultModeIsLegacyPanel
+     [java] PASS HudTest.testFlagEnablesHotbar
+     [java] PASS HudTest.testHudRendersHealthAndSelectionHeadless
+     [java] PASS HudTest.testLayoutSitsOverThePanelStripAtAnyScale
+     [java] PASS HudTest.testLegacyPanelIsBlankedInHotbarMode
+     [java] 44 passed, 0 failed
+
+BUILD SUCCESSFUL
+Total time: 1 second
