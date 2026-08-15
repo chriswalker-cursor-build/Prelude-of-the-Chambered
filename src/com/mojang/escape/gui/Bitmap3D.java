@@ -9,6 +9,7 @@ public class Bitmap3D extends Bitmap {
 	private double[] zBuffer;
 	private double[] zBufferWall;
 	private double xCam, yCam, zCam, rCos, rSin, fov, xCenter, yCenter, rot;
+	private final TorchLight torchLight = new TorchLight();
 
 	public Bitmap3D(int width, int height) {
 		super(width, height);
@@ -286,6 +287,10 @@ public class Bitmap3D extends Bitmap {
 	}
 
 	public void postProcess(Level level) {
+		boolean torchMode = com.mojang.escape.EscapeSettings.lightMode() == com.mojang.escape.EscapeSettings.LightMode.TORCH_RADIUS;
+		if (torchMode) {
+			torchLight.collect(level);
+		}
 		for (int i = 0; i < width * height; i++) {
 			double zl = zBuffer[i];
 			if (zl < 0) {
@@ -299,6 +304,14 @@ public class Bitmap3D extends Bitmap {
 				double xx = ((i % width - width / 2.0) / width);
 				int col = pixels[i];
 				int brightness = (int) (300 - zl * 6 * (xx * xx * 2 + 1));
+				if (torchMode) {
+					// zBuffer depth is world*8 for floors, walls, and sprites;
+					// invert the renderFloor projection to recover world XZ.
+					double xd8 = (xCenter - xp) / fov * zl;
+					double wx = (xd8 * rCos + zl * rSin) / 8 + xCam;
+					double wz = (zl * rCos - xd8 * rSin) / 8 + yCam;
+					brightness += (int) torchLight.lightAt(wx, wz);
+				}
 				brightness = (brightness + ((xp + yp) & 3) * 4) >> 4 << 4;
 				if (brightness < 0) brightness = 0;
 				if (brightness > 255) brightness = 255;

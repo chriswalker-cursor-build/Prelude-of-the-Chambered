@@ -28,4 +28,14 @@ public final class EscapeSettings {
 				? LookMode.MOUSE_LERP
 				: LookMode.KEYBOARD;
 	}
+
+	public enum LightMode {
+		DEPTH_FOG, TORCH_RADIUS
+	}
+
+	public static LightMode lightMode() {
+		return "torchRadius".equals(System.getProperty("escape.light.mode"))
+				? LightMode.TORCH_RADIUS
+				: LightMode.DEPTH_FOG;
+	}
 }
