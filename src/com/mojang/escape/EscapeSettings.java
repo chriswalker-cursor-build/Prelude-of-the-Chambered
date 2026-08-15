@@ -18,4 +18,14 @@ public final class EscapeSettings {
 				? PresentMode.INTEGER_FILL
 				: PresentMode.FIXED4;
 	}
+
+	public enum LookMode {
+		KEYBOARD, MOUSE_LERP
+	}
+
+	public static LookMode lookMode() {
+		return "mouseLerp".equals(System.getProperty("escape.look.mode"))
+				? LookMode.MOUSE_LERP
+				: LookMode.KEYBOARD;
+	}
 }

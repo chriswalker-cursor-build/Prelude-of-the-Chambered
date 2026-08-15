@@ -7,7 +7,7 @@ import javax.swing.*;
 
 import com.mojang.escape.gui.Screen;
 
-public class EscapeComponent extends Canvas implements Runnable {
+public class EscapeComponent extends Canvas implements Runnable, InputHandler.MouseMotionSink {
 	private static final long serialVersionUID = 1L;
 
 	private static final int WIDTH = 160;
@@ -26,6 +26,8 @@ public class EscapeComponent extends Canvas implements Runnable {
 	private boolean hadFocus = false;
 
 	private final EscapeSettings.PresentMode presentMode = EscapeSettings.presentMode();
+	private MouseLook mouseLook;
+	private Robot robot;
 
 	public EscapeComponent() {
 		Dimension size = new Dimension(WIDTH * SCALE, HEIGHT * SCALE);
@@ -43,6 +45,17 @@ public class EscapeComponent extends Canvas implements Runnable {
 		pixels = ((DataBufferInt) img.getRaster().getDataBuffer()).getData();
 
 		inputHandler = new InputHandler();
+
+		if (EscapeSettings.lookMode() == EscapeSettings.LookMode.MOUSE_LERP) {
+			mouseLook = new MouseLook();
+			inputHandler.mouseMotionSink = this;
+			try {
+				robot = new Robot();
+			} catch (AWTException e) {
+				// Without a Robot the cursor cannot be re-centered; deltas still
+				// apply until the pointer reaches the window edge.
+			}
+		}
 
 		addKeyListener(inputHandler);
 		addFocusListener(inputHandler);
@@ -118,7 +131,24 @@ public class EscapeComponent extends Canvas implements Runnable {
 
 	private void tick() {
 		if (hasFocus()) {
+			if (mouseLook != null && game.menu == null && game.player != null) {
+				game.player.rot += mouseLook.tick();
+			}
 			game.tick(inputHandler.keys);
+		}
+	}
+
+	public void mouseMovedTo(int x, int y) {
+		if (mouseLook == null || !hasFocus()) return;
+		int cx = getWidth() / 2;
+		int cy = getHeight() / 2;
+		int dx = x - cx;
+		// The Robot's own re-center event arrives exactly at (cx, cy) and is ignored.
+		if (dx == 0 && y == cy) return;
+		mouseLook.mouseDelta(dx);
+		if (robot != null && isShowing()) {
+			Point screen = getLocationOnScreen();
+			robot.mouseMove(screen.x + cx, screen.y + cy);
 		}
 	}
 

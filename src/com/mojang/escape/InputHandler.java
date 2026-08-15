@@ -5,10 +5,19 @@ import java.awt.event.*;
 public class InputHandler implements KeyListener, FocusListener, MouseListener, MouseMotionListener {
 	public boolean[] keys = new boolean[65536];
 
-	public void mouseDragged(MouseEvent arg0) {
+	/** V2 seam: set when escape.look.mode=mouseLerp; null keeps 2011 no-op behaviour. */
+	public MouseMotionSink mouseMotionSink;
+
+	public interface MouseMotionSink {
+		void mouseMovedTo(int x, int y);
 	}
 
-	public void mouseMoved(MouseEvent arg0) {
+	public void mouseDragged(MouseEvent e) {
+		if (mouseMotionSink != null) mouseMotionSink.mouseMovedTo(e.getX(), e.getY());
+	}
+
+	public void mouseMoved(MouseEvent e) {
+		if (mouseMotionSink != null) mouseMotionSink.mouseMovedTo(e.getX(), e.getY());
 	}
 
 	public void mouseClicked(MouseEvent arg0) {

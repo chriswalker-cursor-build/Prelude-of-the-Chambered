@@ -17,6 +17,7 @@ public final class AllTests {
 			com.mojang.escape.movement.MovementCharacterisationTest.class,
 			com.mojang.escape.level.LevelLoadCharacterisationTest.class,
 			com.mojang.escape.present.PresenterTest.class,
+			com.mojang.escape.look.MouseLookTest.class,
 	};
 
 	public static void main(String[] args) {
