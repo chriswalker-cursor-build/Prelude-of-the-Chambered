@@ -15,6 +15,7 @@ public final class AllTests {
 	private static final Class<?>[] TEST_CLASSES = {
 			com.mojang.escape.SmokeTest.class,
 			com.mojang.escape.movement.MovementCharacterisationTest.class,
+			com.mojang.escape.level.LevelLoadCharacterisationTest.class,
 	};
 
 	public static void main(String[] args) {
