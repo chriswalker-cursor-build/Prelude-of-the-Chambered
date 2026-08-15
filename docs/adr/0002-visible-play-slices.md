@@ -23,7 +23,7 @@ Rejected: stretching to non-integer sizes; raising internal resolution (changes 
 
 ### V2 — Lerp mouse-look
 
-- `InputHandler` currently ignores mouse motion. Capture dx while focused.
+- `InputHandler` currently ignores mouse motion. Capture dx while focused; relative capture needs pointer re-centering (`java.awt.Robot`) at the component level, so this slice also touches `EscapeComponent` and must follow V1.
 - Accumulate a target yaw; each tick `player.rot += α * wrap(target - rot)` (α tuned so a flick eases over several frames, not one).
 - Keyboard Q/E/arrows keep working (`keyboard` default).
 - Do not lerp position — only look. Bob stays as characterised.
