@@ -10,6 +10,8 @@
   <property name="res.dir" value="res"/>
   <property name="build.dir" value="build"/>
   <property name="dist.dir" value="dist"/>
+  <property name="test.src.dir" value="test/java"/>
+  <property name="test.build.dir" value="build-test"/>
 
   <!-- Targets -->
 
@@ -43,9 +45,29 @@
     <java jar="${dist.dir}/${jar.file}" fork="true"/>
   </target>
 
+  <target name="compile-tests" depends="compile">
+    <mkdir dir="${test.build.dir}"/>
+    <javac srcdir="${test.src.dir}" destdir="${test.build.dir}"
+	   classpath="${build.dir}" debug="on" includeantruntime="false">
+      <compilerarg value="-Xlint"/>
+    </javac>
+  </target>
+
+  <target name="test" depends="compile-tests"
+	  description="Run characterisation and unit tests headless.">
+    <java classname="com.mojang.escape.AllTests" fork="true" failonerror="true">
+      <sysproperty key="java.awt.headless" value="true"/>
+      <classpath>
+        <pathelement location="${build.dir}"/>
+        <pathelement location="${test.build.dir}"/>
+      </classpath>
+    </java>
+  </target>
+
   <target name="clean" description="Delete all generated files.">
     <delete dir="${build.dir}"/>
     <delete dir="${dist.dir}"/>
+    <delete dir="${test.build.dir}"/>
   </target>
 
 </project>

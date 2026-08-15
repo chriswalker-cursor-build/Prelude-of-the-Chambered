@@ -1,8 +1,7 @@
 ---
-phase: plan_design
-merge_train: refactor/integration
-verify_command: ant compile
-verify_command_after_S0: ant test
+phase: conversion
+merge_train: cursor/modernisation-train-3359
+verify_command: ant test
 stop_conditions:
   - plan_unapproved
   - dual_run_drift
